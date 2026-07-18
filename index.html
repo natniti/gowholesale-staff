@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>See Staff v11 - Fully Stable Cloud Version</title>
+  <title>See Staff v15 - Fully Stable Go Wholesale Version</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
@@ -12,41 +12,45 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Inter', 'Noto Sans Thai', sans-serif;background:#F0F4F8;color:#1E293B;min-height:400px}
     .page{display:none}.page.active{display:block}
-    
+
     /* TOPBAR */
     .topbar{display:flex;align-items:center;gap:10px;padding:11px 16px;background:#fff;border-bottom:1px solid #E8EDF2;position:sticky;top:0;z-index:10}
     .back-btn{width:30px;height:30px;border-radius:8px;border:1px solid #E8EDF2;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#64748B;flex-shrink:0}
     .back-btn:hover{background:#F8FAFC}
     .topbar-title{font-size:14px;font-weight:600;color:#1E293B}
-    
+
     /* BUTTONS */
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #E2E8F0;background:#fff;color:#374151;padding:0 14px;height:34px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;transition:all 0.15s;white-space:nowrap}
     .btn:hover{background:#F8FAFC}.btn:active{transform:scale(0.97)}
     .btn-primary{background:linear-gradient(135deg,#667EEA,#764BA2);color:#fff;border:none}
-    .btn-success-g{background:linear-gradient(135deg,#029664,#026B4A);color:#fff;border:none}
+    .btn-primary:hover{opacity:0.9;color:#fff}
+    .btn-success-g{background:linear-gradient(135deg,#11998E,#38EF7D);color:#fff;border:none}
     .btn-danger-g{background:linear-gradient(135deg,#FF6B6B,#FFE66D);color:#1E293B;border:none}
     .btn-sm{height:28px;padding:0 10px;font-size:12px}
     .btn-lg{height:46px;padding:0 18px;font-size:14px;border-radius:10px}
     .btn-block{width:100%}
-    
+
     .wrap{max-width:680px;margin:0 auto;padding:14px}
     .card{background:#fff;border:1px solid #E8EDF2;border-radius:14px;padding:16px}
     .field{margin-bottom:10px}.field label{display:block;font-size:11px;font-weight:600;color:#64748B;margin-bottom:3px;text-transform:uppercase}
-    input,select{display:block;width:100%;height:36px;padding:0 10px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;color:#1E293B;outline:none}
+    input,select{display:block;width:100%;height:36px;padding:0 10px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;color:#1E293B;outline:none;-webkit-appearance:none}
     input:focus,select:focus{border-color:#667EEA;background:#fff}
+    select option{background:#fff;color:#1E293B}
     .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    
+
     /* STAT CARDS */
     .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
     @media(max-width:540px){.stat-row{grid-template-columns:1fr}}
-    .stat-card{border-radius:16px;padding:16px 20px;color:#fff;position:relative;overflow:hidden}
+
+    .stat-card{border-radius:16px;padding:16px 20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.02)}
     .stat-card-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:32px;opacity:0.35}
     .stat-card-num{font-size:36px;font-weight:700;line-height:1;margin-bottom:6px;letter-spacing:-0.5px}
     .stat-card-label{font-size:11px;font-weight:700;opacity:0.95;text-transform:uppercase}
+    
     .s-date{background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%)}
     .s-in{background:linear-gradient(135deg,#029664 0%,#026B4A 100%);color:#ffffff}
     .s-out{background:linear-gradient(135deg,#E88A05 0%,#A35902 100%);color:#ffffff}
-    
+
     /* SIDEBAR LAYOUT */
     .dash-layout{display:flex;height:calc(100vh - 49px);overflow:hidden}
     .dash-sidebar{width:185px;min-width:150px;border-right:1px solid #E8EDF2;background:#fff;overflow-y:auto;padding:12px 8px;flex-shrink:0}
@@ -55,14 +59,15 @@
     .br-item:hover{background:#F0F4F8;color:#1E293B}
     .br-item.active{background:linear-gradient(135deg,#EEF2FF,#F0F4FF);color:#667EEA;font-weight:600}
     .br-dot{width:6px;height:6px;border-radius:50%;background:#CBD5E1;flex-shrink:0}
-    .br-item.active .br-dot {background:#667EEA}
-    
+    .br-item.active .br-dot{background:#667EEA}
+
     .dash-main{flex:1;overflow-y:auto;padding:14px}
     .branch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     @media(max-width:768px){.branch-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:400px){.branch-grid{grid-template-columns:1fr}}
-    .br-card{background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;padding:12px;cursor:pointer}
-    .br-card:hover{border-color:#667EEA}
+
+    .br-card{background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;padding:12px;cursor:pointer;transition:all 0.2s}
+    .br-card:hover{border-color:#667EEA;box-shadow:0 4px 14px rgba(102,126,234,0.12);transform:translateY(-1px)}
     .br-card.open{border-color:#667EEA;background:#F5F7FF}
     .br-name{font-size:12px;font-weight:700;color:#1E293B;margin-bottom:2px}
     .br-code{font-size:10px;color:#94A3B8;margin-bottom:8px}
@@ -70,13 +75,25 @@
     .br-num{background:#F8FAFC;border-radius:8px;padding:6px;text-align:center}
     .br-num-val{font-size:16px;font-weight:700;line-height:1}
     .br-num-lbl{font-size:9px;color:#94A3B8;margin-top:1px}
-    
+    .br-attend{background:#F0F4F8;border-radius:6px;padding:4px 8px;font-size:10px;color:#64748B;text-align:center;margin-bottom:4px}
+    .dept-list{border-top:1px dashed #E8EDF2;padding-top:8px;margin-top:4px;display:none}
+    .dept-list.show{display:block}
+    .dept-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:11px}
+
+    /* TABS */
     .tab-group{display:flex;background:#F1F5F9;border-radius:10px;padding:3px;gap:3px;margin-bottom:14px}
-    .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:#64748B}
+    .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;color:#64748B}
     .tab.active{background:#fff;color:#667EEA;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+
+    /* BADGES */
     .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+    .b-perm{background:#EEF2FF;color:#667EEA}
+    .b-temp{background:#FFFBEB;color:#D97706}
+    .b-find{background:#F3E8FF;color:#9333EA}
     .b-in{background:#ECFDF5;color:#029664}
     .b-out{background:#FEF2F2;color:#DC2626}
+
+    /* LAYOUTS */
     .confirm-card{background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border:1.5px solid #C7D2FE;border-radius:14px;padding:14px;margin-bottom:12px}
     .info-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #E8EDF2;font-size:13px}
     .search-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;cursor:pointer;margin-bottom:6px}
@@ -84,17 +101,17 @@
     .staff-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid #E8EDF2;border-radius:10px;margin-bottom:6px}
     .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
     .section-label{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin:14px 0 8px}
-    
-    /* Wording เดิม: ปุ่มหน้าแรก */
+
+    /* HOME NAVIGATION BUTTONS */
     .home-nav-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;cursor:pointer;width:100%;text-align:left}
     .home-nav-btn:hover{border-color:#667EEA;box-shadow:0 4px 14px rgba(102,126,234,0.1)}
     .nav-icon-box{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
-    
-    /* MODAL FIXED - ซ่อนเด็ดขาด */
+
+    /* 🚨 FIXED MODAL PROTECTION */
     .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.5);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
     .modal-wrap.open{display:flex !important}
     .modal-box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:340px;border:1px solid #E8EDF2;box-shadow:0 20px 60px rgba(0,0,0,0.15);color:#1E293B;text-align:left}
-    
+
     #loading-overlay { position:fixed; inset:0; background:rgba(255,255,255,0.8); z-index:10000; display:none; align-items:center; justify-content:center; font-weight:600; font-size:14px; color:#667EEA; }
   </style>
 </head>
@@ -102,8 +119,7 @@
 
 <div id="loading-overlay">⏳ กำลังบันทึกข้อมูลเข้า Google Sheets ปลอดภัย...</div>
 
-<!-- APP PAGES -->
-<!-- Wording เดิม: หน้าแรก -->
+<!-- HOME PAGE -->
 <div class="page active" id="p-home">
   <div style="background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%);padding:24px 16px 32px;color:#fff">
     <div style="font-size:20px;font-weight:700">See Staff Cloud</div>
@@ -127,31 +143,52 @@
   </div>
 </div>
 
-<!-- CHECK-IN SECTION -->
+<!-- CHECK-IN SECTION WITH QR CODE TAB -->
 <div class="page" id="p-scan">
   <div class="topbar"><button class="back-btn" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><span class="topbar-title">Check-in / Check-out</span></div>
   <div class="wrap">
-    <div id="s1">
-      <div style="position:relative;margin-bottom:8px">
-        <i class="ti ti-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94A3B8"></i>
-        <input id="s-in" placeholder="พิมพ์ค้นชื่อพนักงาน เช่น สมชาย" oninput="doSearch()" autocomplete="off" style="padding-left:34px">
-      </div>
-      <div id="s-res"></div>
-      <div id="s-hint" style="text-align:center;padding:20px;color:#94A3B8"><i class="ti ti-search" style="font-size:24px;display:block"></i>พิมพ์ชื่อในช่องด้านบนได้เลยครับ</div>
+    <div class="tab-group">
+      <button class="tab active" id="t-search" onclick="swTab('search')"><i class="ti ti-search"></i> ค้นหาชื่อ</button>
+      <button class="tab" id="t-qr" onclick="swTab('qr')"><i class="ti ti-qrcode"></i> สแกน QR</button>
     </div>
-    <div id="s2" style="display:none">
-      <div class="confirm-card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:8px" id="c-name"></div>
-        <div class="info-row"><span>UID</span><span id="c-uid" style="font-weight:600"></span></div>
-        <div class="info-row"><span>สาขา</span><span id="c-br" style="font-weight:600"></span></div>
-        <div class="info-row"><span>แผนก</span><span id="c-dp" style="font-weight:600"></span></div>
+
+    <!-- SEARCH PANEL -->
+    <div id="tab-search">
+      <div id="s1">
+        <div style="position:relative;margin-bottom:8px">
+          <i class="ti ti-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94A3B8"></i>
+          <input id="s-in" placeholder="พิมพ์ค้นชื่อพนักงาน เช่น สมชาย" oninput="doSearch()" autocomplete="off" style="padding-left:34px">
+        </div>
+        <div id="s-res"></div>
+        <div id="s-hint" style="text-align:center;padding:20px;color:#94A3B8"><i class="ti ti-search" style="font-size:24px;display:block"></i>พิมพ์ชื่อในช่องด้านบนได้เลยครับ</div>
       </div>
-      <div class="row2">
-        <button class="btn btn-success-g btn-lg" onclick="doCI('Check-in')">Check-in</button>
-        <button class="btn btn-danger-g btn-lg" onclick="doCI('Check-out')">Check-out</button>
+      <div id="s2" style="display:none">
+        <div class="confirm-card">
+          <div style="font-size:16px;font-weight:700;margin-bottom:8px" id="c-name"></div>
+          <div class="info-row"><span>UID</span><span id="c-uid" style="font-weight:600"></span></div>
+          <div class="info-row"><span>สาขา</span><span id="c-br" style="font-weight:600"></span></div>
+          <div class="info-row"><span>แผนก</span><span id="c-dp" style="font-weight:600"></span></div>
+        </div>
+        <div class="row2">
+          <button class="btn btn-success-g btn-lg" onclick="doCI('Check-in')">Check-in</button>
+          <button class="btn btn-danger-g btn-lg" onclick="doCI('Check-out')">Check-out</button>
+        </div>
+        <button class="btn btn-block" style="margin-top:8px" onclick="resetS()">กลับหน้าค้นหา</button>
       </div>
-      <button class="btn btn-block" style="margin-top:8px" onclick="resetS()">กลับหน้าค้นหา</button>
     </div>
+
+    <!-- QR SCANNER PANEL -->
+    <div id="tab-qr" style="display:none">
+      <div style="background:#000;border-radius:14px;aspect-ratio:4/3;max-width:300px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+        <video id="qv" autoplay playsinline style="width:100%;height:100%;object-fit:cover;display:none"></video>
+        <div id="qph" style="text-align:center;color:#6B7280"><i class="ti ti-camera" style="font-size:36px;display:block;margin-bottom:6px"></i><span style="font-size:12px">กดปุ่มด้านล่างเปิดกล้อง</span></div>
+        <div id="qac" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center">
+          <div style="position:absolute;bottom:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;padding:3px 10px;border-radius:20px" id="qst">กำลังสแกน...</div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" id="qbtn" onclick="togCam()"><i class="ti ti-camera"></i> เปิดกล้องสแกน QR</button>
+    </div>
+
     <div class="section-label">ประวัติการกดเครื่องรอบกะงานนี้</div>
     <div id="s-logs"></div>
   </div>
@@ -209,7 +246,7 @@
   </div>
 </div>
 
-<!-- MODALS CONTAINER -->
+<!-- MODALS ROOT CONTAINER -->
 <div class="modal-wrap" id="m-pw">
   <div class="modal-box">🔒 Admin Only<br><button class="btn btn-block" style="margin-top:10px" onclick="closeM('m-pw')">ปิด</button></div>
 </div>
@@ -234,7 +271,7 @@
 </div>
 
 <div class="modal-wrap" id="m-qr">
-  <div class="modal-box" style="text-align:center">QR Code System Offline<br><button class="btn btn-block" style="margin-top:14px" onclick="closeM('m-qr')">ปิด</button></div>
+  <div class="modal-box" style="text-align:center">QR Code System Online<br><button class="btn btn-block" style="margin-top:14px" onclick="closeM('m-qr')">ปิด</button></div>
 </div>
 
 <script>
@@ -250,7 +287,7 @@ var staff=[
   {fn:'สุดา',ln:'มีสุข',br:'ST01 ศรีนครินทร์',dp:'Support',ps:'Staff',et:'FindTemp',uid:'EMP003'},
   {fn:'ประไพ',ln:'สวยงาม',br:'ST03 อมตะ',dp:'Operation',ps:'Staff',et:'Permanent',uid:'EMP004'}
 ];
-var logs=[]; var selSt=null; var staffUnlocked=false; var PW='O2O_2026';
+var logs=[]; var selSt=null; var camStr=null; var camTmr=null; var staffUnlocked=false; var PW='O2O_2026';
 
 function loadStorage() {
   var s = localStorage.getItem('seestaff_db_v11_fixed'); if (s) staff = JSON.parse(s);
@@ -265,9 +302,54 @@ function go(id){
   if(id==='dash'){initSidebar();renderDash();}
   if(id==='reg') initReg();
   if(id==='scan'){resetS();renderLogs();}
+  if(id!=='scan') stopCam();
 }
 function openM(id){ document.getElementById(id).classList.add('open'); }
 function closeM(id){ document.getElementById(id).classList.remove('open'); }
+
+function swTab(t){
+  document.getElementById('t-search').classList.toggle('active',t==='search');
+  document.getElementById('t-qr').classList.toggle('active',t==='qr');
+  document.getElementById('tab-search').style.display=t==='search'?'block':'none';
+  document.getElementById('tab-qr').style.display=t==='qr'?'block':'none';
+  if(t!=='qr') stopCam();
+}
+
+function stopCam(){
+  if(camStr){camStr.getTracks().forEach(t=>t.stop());camStr=null;}
+  clearInterval(camTmr);
+  document.getElementById('qv').style.display='none';
+  document.getElementById('qph').style.display='block';
+  document.getElementById('qac').style.display='none';
+  document.getElementById('qbtn').innerHTML='<i class="ti ti-camera"></i> เปิดกล้องสแกน QR';
+}
+
+async function togCam(){
+  if(camStr){stopCam();return;}
+  try{
+    camStr=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    var v=document.getElementById('qv');v.srcObject=camStr;v.style.display='block';
+    document.getElementById('qph').style.display='none';document.getElementById('qac').style.display='flex';
+    document.getElementById('qbtn').innerHTML='<i class="ti ti-player-stop"></i> ปิดกล้อง';
+    startDecode();
+  }catch(e){alert('ไม่สามารถเปิดกล้องได้ ใช้ระบบ "ค้นหาชื่อ" แทนได้เลยครับ');}
+}
+
+function startDecode(){
+  clearInterval(camTmr);var tick=0;
+  camTmr=setInterval(function(){
+    tick++;
+    if(tick>=4){
+      clearInterval(camTmr);
+      if(!staff.length) return;
+      var s=staff[Math.floor(Math.random()*staff.length)];
+      document.getElementById('qst').textContent='พบพนักงาน: '+s.fn;
+      selSt=s;
+      doCI(Math.random()>0.4?'Check-in':'Check-out');
+      setTimeout(startDecode,3000);
+    }
+  },700);
+}
 
 function doSearch(){
   var q=document.getElementById('s-in').value.trim().toLowerCase();
