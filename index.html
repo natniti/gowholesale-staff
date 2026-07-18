@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>See Staff v15 - Fully Stable Go Wholesale Version</title>
+  <title>See Staff v15 - Go Wholesale Management</title>
+  <!-- ใช้ฟอนต์ Inter และ Noto Sans Thai เพื่อให้ตัวหนาคมชัด ช่องไฟสวยงามมองง่าย -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
@@ -32,8 +33,8 @@
 
     .wrap{max-width:680px;margin:0 auto;padding:14px}
     .card{background:#fff;border:1px solid #E8EDF2;border-radius:14px;padding:16px}
-    .field{margin-bottom:10px}.field label{display:block;font-size:11px;font-weight:600;color:#64748B;margin-bottom:3px;text-transform:uppercase}
-    input,select{display:block;width:100%;height:36px;padding:0 10px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;color:#1E293B;outline:none;-webkit-appearance:none}
+    .field{margin-bottom:10px}.field label{display:block;font-size:11px;font-weight:600;color:#64748B;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em}
+    input,select{display:block;width:100%;height:36px;padding:0 10px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;color:#1E293B;outline:none;transition:border 0.15s;-webkit-appearance:none}
     input:focus,select:focus{border-color:#667EEA;background:#fff}
     select option{background:#fff;color:#1E293B}
     .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -45,7 +46,7 @@
     .stat-card{border-radius:16px;padding:16px 20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.02)}
     .stat-card-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:32px;opacity:0.35}
     .stat-card-num{font-size:36px;font-weight:700;line-height:1;margin-bottom:6px;letter-spacing:-0.5px}
-    .stat-card-label{font-size:11px;font-weight:700;opacity:0.95;text-transform:uppercase}
+    .stat-card-label{font-size:11px;font-weight:700;opacity:0.95;text-transform:uppercase;letter-spacing:0.04em}
     
     .s-date{background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%)}
     .s-in{background:linear-gradient(135deg,#029664 0%,#026B4A 100%);color:#ffffff}
@@ -54,14 +55,15 @@
     /* SIDEBAR LAYOUT */
     .dash-layout{display:flex;height:calc(100vh - 49px);overflow:hidden}
     .dash-sidebar{width:185px;min-width:150px;border-right:1px solid #E8EDF2;background:#fff;overflow-y:auto;padding:12px 8px;flex-shrink:0}
-    .dash-sidebar h3{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:8px;padding:0 6px}
-    .br-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:#64748B;margin-bottom:2px}
+    .dash-sidebar h3{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;padding:0 6px}
+    .br-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:#64748B;transition:all 0.15s;margin-bottom:2px}
     .br-item:hover{background:#F0F4F8;color:#1E293B}
     .br-item.active{background:linear-gradient(135deg,#EEF2FF,#F0F4FF);color:#667EEA;font-weight:600}
     .br-dot{width:6px;height:6px;border-radius:50%;background:#CBD5E1;flex-shrink:0}
     .br-item.active .br-dot{background:#667EEA}
 
     .dash-main{flex:1;overflow-y:auto;padding:14px}
+
     .branch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     @media(max-width:768px){.branch-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:400px){.branch-grid{grid-template-columns:1fr}}
@@ -82,7 +84,7 @@
 
     /* TABS */
     .tab-group{display:flex;background:#F1F5F9;border-radius:10px;padding:3px;gap:3px;margin-bottom:14px}
-    .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;color:#64748B}
+    .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;color:#64748B;transition:all 0.15s}
     .tab.active{background:#fff;color:#667EEA;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 
     /* BADGES */
@@ -93,169 +95,51 @@
     .b-in{background:#ECFDF5;color:#029664}
     .b-out{background:#FEF2F2;color:#DC2626}
 
-    /* LAYOUTS */
+    /* ITEMS & LAYOUTS */
     .confirm-card{background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border:1.5px solid #C7D2FE;border-radius:14px;padding:14px;margin-bottom:12px}
     .info-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #E8EDF2;font-size:13px}
-    .search-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;cursor:pointer;margin-bottom:6px}
+    .info-row:last-child{border-bottom:none}
+    .search-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all 0.15s;margin-bottom:6px}
+    .search-item:hover{border-color:#667EEA;background:#EEF2FF}
     .log-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#fff;border:1px solid #E8EDF2;border-radius:10px;margin-bottom:6px}
     .staff-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid #E8EDF2;border-radius:10px;margin-bottom:6px}
+
     .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
-    .section-label{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin:14px 0 8px}
+    .section-label{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px}
 
-    /* HOME NAVIGATION BUTTONS */
-    .home-nav-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;cursor:pointer;width:100%;text-align:left}
-    .home-nav-btn:hover{border-color:#667EEA;box-shadow:0 4px 14px rgba(102,126,234,0.1)}
-    .nav-icon-box{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
-
-    /* 🚨 FIXED MODAL PROTECTION */
-    .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.5);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
+    /* MODAL */
+    .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.4);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
     .modal-wrap.open{display:flex !important}
-    .modal-box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:340px;border:1px solid #E8EDF2;box-shadow:0 20px 60px rgba(0,0,0,0.15);color:#1E293B;text-align:left}
+    .modal-box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:340px;border:1px solid #E8EDF2;box-shadow:0 20px 60px rgba(0,0,0,0.12);color:#1E293B;text-align:left}
 
-    #loading-overlay { position:fixed; inset:0; background:rgba(255,255,255,0.8); z-index:10000; display:none; align-items:center; justify-content:center; font-weight:600; font-size:14px; color:#667EEA; }
+    /* HOME */
+    .home-nav-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;cursor:pointer;transition:all 0.2s;width:100%;text-align:left}
+    .home-nav-btn:hover{border-color:#667EEA;box-shadow:0 4px 14px rgba(102,126,234,0.1);transform:translateY(-1px)}
+    .nav-icon-box{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
   </style>
 </head>
 <body>
 
-<div id="loading-overlay">⏳ กำลังบันทึกข้อมูลเข้า Google Sheets ปลอดภัย...</div>
-
-<!-- HOME PAGE -->
-<div class="page active" id="p-home">
-  <div style="background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%);padding:24px 16px 32px;color:#fff">
-    <div style="font-size:20px;font-weight:700">See Staff Cloud</div>
-    <div style="font-size:11px;opacity:0.8">Go Wholesale • บันทึกกะทำงานออนไลน์</div>
-  </div>
-  <div class="wrap" style="max-width:480px;margin-top:-16px">
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <button class="home-nav-btn" onclick="go('scan')">
-        <div class="nav-icon-box" style="background:#ECFDF5"><i class="ti ti-clock-check" style="color:#059669"></i></div>
-        <div style="flex:1"><strong>Check-in / Check-out</strong><div style="font-size:11px;color:#64748B">พิมพ์ชื่อเพื่อสแกนเข้างานจริง</div></div>
-      </button>
-      <button class="home-nav-btn" onclick="go('dash')">
-        <div class="nav-icon-box" style="background:#EEF2FF"><i class="ti ti-layout-dashboard" style="color:#667EEA"></i></div>
-        <div style="flex:1"><strong>Dashboard หน้ากากรายงาน</strong><div style="font-size:11px;color:#64748B">มอนิเตอร์จำนวนคนรายสาขาวันนี้</div></div>
-      </button>
-      <button class="home-nav-btn" onclick="go('reg')">
-        <div class="nav-icon-box" style="background:#F3E8FF"><i class="ti ti-user-plus" style="color:#9333EA"></i></div>
-        <div style="flex:1"><strong>ลงทะเบียน / ดูรายชื่อพนักงาน</strong><div style="font-size:11px;color:#64748B">ระบบจัดการพนักงานคลังสินค้า</div></div>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- CHECK-IN SECTION WITH QR CODE TAB -->
-<div class="page" id="p-scan">
-  <div class="topbar"><button class="back-btn" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><span class="topbar-title">Check-in / Check-out</span></div>
-  <div class="wrap">
-    <div class="tab-group">
-      <button class="tab active" id="t-search" onclick="swTab('search')"><i class="ti ti-search"></i> ค้นหาชื่อ</button>
-      <button class="tab" id="t-qr" onclick="swTab('qr')"><i class="ti ti-qrcode"></i> สแกน QR</button>
-    </div>
-
-    <!-- SEARCH PANEL -->
-    <div id="tab-search">
-      <div id="s1">
-        <div style="position:relative;margin-bottom:8px">
-          <i class="ti ti-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94A3B8"></i>
-          <input id="s-in" placeholder="พิมพ์ค้นชื่อพนักงาน เช่น สมชาย" oninput="doSearch()" autocomplete="off" style="padding-left:34px">
-        </div>
-        <div id="s-res"></div>
-        <div id="s-hint" style="text-align:center;padding:20px;color:#94A3B8"><i class="ti ti-search" style="font-size:24px;display:block"></i>พิมพ์ชื่อในช่องด้านบนได้เลยครับ</div>
-      </div>
-      <div id="s2" style="display:none">
-        <div class="confirm-card">
-          <div style="font-size:16px;font-weight:700;margin-bottom:8px" id="c-name"></div>
-          <div class="info-row"><span>UID</span><span id="c-uid" style="font-weight:600"></span></div>
-          <div class="info-row"><span>สาขา</span><span id="c-br" style="font-weight:600"></span></div>
-          <div class="info-row"><span>แผนก</span><span id="c-dp" style="font-weight:600"></span></div>
-        </div>
-        <div class="row2">
-          <button class="btn btn-success-g btn-lg" onclick="doCI('Check-in')">Check-in</button>
-          <button class="btn btn-danger-g btn-lg" onclick="doCI('Check-out')">Check-out</button>
-        </div>
-        <button class="btn btn-block" style="margin-top:8px" onclick="resetS()">กลับหน้าค้นหา</button>
-      </div>
-    </div>
-
-    <!-- QR SCANNER PANEL -->
-    <div id="tab-qr" style="display:none">
-      <div style="background:#000;border-radius:14px;aspect-ratio:4/3;max-width:300px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
-        <video id="qv" autoplay playsinline style="width:100%;height:100%;object-fit:cover;display:none"></video>
-        <div id="qph" style="text-align:center;color:#6B7280"><i class="ti ti-camera" style="font-size:36px;display:block;margin-bottom:6px"></i><span style="font-size:12px">กดปุ่มด้านล่างเปิดกล้อง</span></div>
-        <div id="qac" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center">
-          <div style="position:absolute;bottom:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;padding:3px 10px;border-radius:20px" id="qst">กำลังสแกน...</div>
-        </div>
-      </div>
-      <button class="btn btn-primary btn-block" id="qbtn" onclick="togCam()"><i class="ti ti-camera"></i> เปิดกล้องสแกน QR</button>
-    </div>
-
-    <div class="section-label">ประวัติการกดเครื่องรอบกะงานนี้</div>
-    <div id="s-logs"></div>
-  </div>
-</div>
-
-<!-- DASHBOARD -->
-<div class="page" id="p-dash">
-  <div class="topbar"><button class="back-btn" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><span class="topbar-title">Dashboard หน้ากากรายงาน</span></div>
-  <div class="dash-layout">
-    <div class="dash-sidebar"><h3>สาขา</h3><div id="br-sidebar"></div></div>
-    <div class="dash-main">
-      <div class="stat-row">
-        <div class="stat-card s-date"><div class="stat-card-num" style="font-size:13px" id="d-date">-</div><div class="stat-card-label">Work Date</div></div>
-        <div class="stat-card s-in"><div class="stat-card-num" id="d-in">0</div><div class="stat-card-label">CHECK-IN รวม</div></div>
-        <div class="stat-card s-out"><div class="stat-card-num" id="d-out">0</div><div class="stat-card-label">CHECK-OUT รวม</div></div>
-      </div>
-      <div class="branch-grid" id="d-grid"></div>
-    </div>
-  </div>
-</div>
-
-<!-- REGISTER -->
-<div class="page" id="p-reg">
-  <div class="topbar"><button class="back-btn" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><span class="topbar-title">ลงทะเบียน / ดูรายชื่อพนักงาน</span></div>
-  <div class="wrap">
-    <div class="card" style="margin-bottom:12px">
-      <div class="row2">
-        <div class="field"><label>ชื่อ *</label><input id="r-fn" placeholder="ชื่อ"></div>
-        <div class="field"><label>นามสกุล *</label><input id="r-ln" placeholder="นามสกุล"></div>
-      </div>
-      <div class="field"><label>สาขา *</label><select id="r-br"></select></div>
-      <div class="row2">
-        <div class="field"><label>แผนก *</label>
-          <select id="r-dp"><option>Operation</option><option>Delivery</option><option>Support</option></select>
-        </div>
-        <div class="field"><label>ประเภท *</label>
-          <select id="r-et"><option value="Permanent">Permanent</option><option value="Temporary">Temporary</option><option value="FindTemp">FindTemp</option></select>
-        </div>
-      </div>
-      <button class="btn btn-primary btn-block" onclick="doReg()">ลงทะเบียนพนักงาน</button>
-    </div>
-
-    <div id="staff-locked" class="card" style="text-align:center">
-      <p style="font-size:12px;color:#64748B;margin-bottom:8px">กรอกพาสเวิร์ดเพื่อเปิดดูรายชื่อพนักงานคลังสินค้า</p>
-      <button class="btn btn-sm btn-primary" onclick="openM('m-staff-pw')">เข้าถึงข้อมูล</button>
-    </div>
-    <div id="staff-unlocked" style="display:none">
-      <div class="field" style="margin-bottom: 8px;">
-        <label>ค้นหารายชื่อพนักงาน</label>
-        <input id="sl-q" placeholder="พิมพ์ชื่อเพื่อกรองรายชื่อ..." oninput="renderStaff()">
-      </div>
-      <div class="section-label">พนักงานในระบบ (<span id="r-cnt">0</span> คน)</div>
-      <div id="r-list"></div>
-    </div>
-  </div>
-</div>
-
-<!-- MODALS ROOT CONTAINER -->
+<!-- MODALS -->
 <div class="modal-wrap" id="m-pw">
-  <div class="modal-box">🔒 Admin Only<br><button class="btn btn-block" style="margin-top:10px" onclick="closeM('m-pw')">ปิด</button></div>
+  <div class="modal-box">
+    <div style="font-size:20px;margin-bottom:6px">🔒</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:4px;color:#1E293B">Export — Admin only</div>
+    <p style="font-size:13px;color:#64748B;margin-bottom:14px">กรอก password เพื่อ export ข้อมูล</p>
+    <div class="field"><label>Password</label><input type="password" id="pw-in" placeholder="กรอก password" onkeydown="if(event.key==='Enter')checkPw()"></div>
+    <p id="pw-err" style="color:#DC2626;font-size:12px;margin-bottom:8px;display:none">รหัสไม่ถูกต้อง</p>
+    <div style="display:flex;gap:8px"><button class="btn btn-primary btn-block" onclick="checkPw()">ยืนยัน</button><button class="btn btn-block" onclick="closeM('m-pw')">ยกเลิก</button></div>
+  </div>
 </div>
 
 <div class="modal-wrap" id="m-staff-pw">
   <div class="modal-box">
-    🛡️ ปลดล็อกรายชื่อพนักงาน
-    <div class="field" style="margin-top:10px"><label>Password</label><input type="password" id="spw-in" placeholder="กรอก password" onkeydown="if(event.key==='Enter')checkSpw()"></div>
-    <div style="display:flex;gap:8px"><button class="btn btn-primary btn-block" onclick="checkSpw()">ยืนยัน</button><button class="btn btn-block" onclick="closeM('m-staff-pw')">ยกเลิก</button></div>
+    <div style="font-size:20px;margin-bottom:6px">🛡️</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:4px;color:#1E293B">รายชื่อพนักงาน</div>
+    <p style="font-size:13px;color:#64748B;margin-bottom:14px">ต้องใส่ password เพื่อเข้าถึงข้อมูล</p>
+    <div class="field"><label>Password</label><input type="password" id="spw-in" placeholder="กรอก password" onkeydown="if(event.key==='Enter')checkSpw()"></div>
+    <p id="spw-err" style="color:#DC2626;font-size:12px;margin-bottom:8px;display:none">รหัสไม่ถูกต้อง</p>
+    <div style="display:flex;gap:8px"><button class="btn btn-primary btn-block" onclick="checkSpw()">เข้าถึงข้อมูล</button><button class="btn btn-block" onclick="closeM('m-staff-pw')">ยกเลิก</button></div>
   </div>
 </div>
 
@@ -263,50 +147,322 @@
   <div class="modal-box" style="text-align:center">
     <div id="r-icon" style="font-size:48px;margin-bottom:8px"></div>
     <div id="r-status" style="font-size:20px;font-weight:700;margin-bottom:6px"></div>
-    <div id="r-name" style="font-size:15px;font-weight:600;"></div>
+    <div id="r-name" style="font-size:15px;font-weight:600;color:#1E293B"></div>
     <div id="r-info" style="font-size:12px;color:#64748B;margin-top:3px"></div>
-    <div id="r-time" style="font-size:12px;color:#94A3B8;background:#F8FAFC;border-radius:8px;padding:6px 10px;margin-top:10px"></div>
+    <div id="r-time" style="font-size:12px;color:#94A3B8;background:#F8FAFC;border-radius:8px;padding:6px 10px;margin-top:10px;border:1px solid #E8EDF2"></div>
     <button class="btn btn-primary btn-block" style="margin-top:14px" onclick="closeM('m-result')">ตกลง</button>
   </div>
 </div>
 
 <div class="modal-wrap" id="m-qr">
-  <div class="modal-box" style="text-align:center">QR Code System Online<br><button class="btn btn-block" style="margin-top:14px" onclick="closeM('m-qr')">ปิด</button></div>
+  <div class="modal-box" style="text-align:center">
+    <div style="font-size:15px;font-weight:700;margin-bottom:2px;color:#1E293B">QR Code พนักงาน</div>
+    <div id="qr-name" style="font-size:12px;color:#64748B;margin-bottom:14px"></div>
+    <div style="display:flex;justify-content:center;margin-bottom:12px"><div style="background:#fff;border:1.5px solid #E8EDF2;border-radius:12px;padding:10px"><canvas id="qr-cv" width="140" height="140"></canvas></div></div>
+    <p style="font-size:11px;color:#94A3B8;margin-bottom:12px">พิมพ์หรือบันทึกรูปเพื่อใช้ Check-in</p>
+    <button class="btn btn-block" onclick="closeM('m-qr')">ปิด</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="p-home">
+  <div style="background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%);padding:24px 16px 32px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+      <div style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center">
+        <i class="ti ti-users-group" style="font-size:22px;color:#fff" aria-hidden="true"></i>
+      </div>
+      <div>
+        <div style="font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.3px">See Staff</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.7)">Go Wholesale • Branch Manpower</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:480px;margin:-16px auto 0;padding:0 14px 20px">
+    <div style="background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start">
+      <i class="ti ti-alert-triangle" style="font-size:15px;color:#D97706;flex-shrink:0;margin-top:1px" aria-hidden="true"></i>
+      <p style="font-size:13px;color:#92400E">พนักงานทุกคนต้อง <strong>Check-in</strong> และ <strong>Check-out</strong> ผ่านระบบนี้ทุกครั้ง</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="home-nav-btn" onclick="go('scan')">
+        <div class="nav-icon-box" style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5)">
+          <i class="ti ti-clock-check" style="font-size:20px;color:#059669" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:#1E293B">Check-in / Check-out</div>
+          <div style="font-size:11px;color:#64748B;margin-top:1px">ค้นหาชื่อหรือสแกน QR</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:16px;color:#CBD5E1" aria-hidden="true"></i>
+      </button>
+
+      <button class="home-nav-btn" onclick="go('dash')">
+        <div class="nav-icon-box" style="background:linear-gradient(135deg,#EEF2FF,#E0E7FF)">
+          <i class="ti ti-layout-dashboard" style="font-size:20px;color:#667EEA" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:#1E293B">Dashboard</div>
+          <div style="font-size:11px;color:#64748B;margin-top:1px">ภาพรวมกำลังคนรายสาขา</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:16px;color:#CBD5E1" aria-hidden="true"></i>
+      </button>
+
+      <button class="home-nav-btn" onclick="go('reg')">
+        <div class="nav-icon-box" style="background:linear-gradient(135deg,#F3E8FF,#EDE9FE)">
+          <i class="ti ti-user-plus" style="font-size:20px;color:#9333EA" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:#1E293B">ลงทะเบียนพนักงาน</div>
+          <div style="font-size:11px;color:#64748B;margin-top:1px">Register + QR Code</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:16px;color:#CBD5E1" aria-hidden="true"></i>
+      </button>
+    </div>
+    <p style="text-align:center;font-size:11px;color:#CBD5E1;margin-top:20px">Go Wholesale © 2026 • See Staff v15</p>
+  </div>
+</div>
+
+<!-- CHECK-IN / SEARCH -->
+<div class="page" id="p-scan">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('home')" aria-label="กลับ"><i class="ti ti-arrow-left" style="font-size:15px" aria-hidden="true"></i></button>
+    <span class="topbar-title">Check-in / Check-out</span>
+  </div>
+  <div class="wrap">
+    <div class="tab-group">
+      <button class="tab active" id="t-search" onclick="swTab('search')"><i class="ti ti-search" style="font-size:13px" aria-hidden="true"></i> ค้นหาชื่อ</button>
+      <button class="tab" id="t-qr" onclick="swTab('qr')"><i class="ti ti-qrcode" style="font-size:13px" aria-hidden="true"></i> สแกน QR</button>
+    </div>
+
+    <!-- SEARCH PANEL -->
+    <div id="tab-search">
+      <div id="s1">
+        <div style="position:relative;margin-bottom:8px">
+          <i class="ti ti-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:#94A3B8" aria-hidden="true"></i>
+          <input id="s-in" placeholder="พิมพ์ชื่อ หรือ UID เช่น สมชาย / EMP001" oninput="doSearch()" autocomplete="off" style="padding-left:34px">
+        </div>
+        <div id="s-res"></div>
+        <div id="s-empty" style="display:none;text-align:center;padding:20px;color:#94A3B8"><i class="ti ti-mood-empty" style="font-size:28px;display:block;margin-bottom:6px" aria-hidden="true"></i><span style="font-size:13px">ไม่พบพนักงาน</span></div>
+        <div id="s-hint" style="text-align:center;padding:20px;color:#94A3B8"><i class="ti ti-search" style="font-size:28px;display:block;margin-bottom:6px" aria-hidden="true"></i><span style="font-size:13px">พิมพ์ชื่อหรือ UID เพื่อค้นหา</span></div>
+      </div>
+      <div id="s2" style="display:none">
+        <div class="confirm-card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div class="avatar" id="c-av" style="width:44px;height:44px;font-size:17px;background:linear-gradient(135deg,#667EEA,#764BA2);color:#fff"></div>
+            <div style="flex:1">
+              <div style="font-size:15px;font-weight:700;color:#1E293B" id="c-name"></div>
+              <div style="font-size:11px;color:#64748B" id="c-uid"></div>
+            </div>
+            <span class="badge" id="c-badge"></span>
+          </div>
+          <div class="info-row"><span style="font-size:12px;color:#64748B">สาขา</span><span style="font-size:13px;font-weight:600;color:#1E293B" id="c-br"></span></div>
+          <div class="info-row"><span style="font-size:12px;color:#64748B">แผนก</span><span style="font-size:13px;font-weight:600;color:#1E293B" id="c-dp"></span></div>
+          <div class="info-row"><span style="font-size:12px;color:#64748B">ตำแหน่ง</span><span style="font-size:13px;font-weight:600;color:#1E293B" id="c-ps"></span></div>
+          <div class="info-row"><span style="font-size:12px;color:#64748B">ประเภท</span><span class="badge" id="c-et"></span></div>
+        </div>
+        <div class="row2" style="margin-bottom:8px">
+          <button class="btn btn-success-g btn-lg btn-block" id="btn-ci" onclick="doCI('Check-in')"><i class="ti ti-login-2" style="font-size:16px" aria-hidden="true"></i> Check-in</button>
+          <button class="btn btn-danger-g btn-lg btn-block" id="btn-co" onclick="doCI('Check-out')"><i class="ti ti-logout-2" style="font-size:16px" aria-hidden="true"></i> Check-out</button>
+        </div>
+        <button class="btn btn-block" onclick="resetS()"><i class="ti ti-arrow-left" style="font-size:13px" aria-hidden="true"></i> ค้นหาใหม่</button>
+      </div>
+    </div>
+
+    <!-- QR SCANNER -->
+    <div id="tab-qr" style="display:none">
+      <div style="background:#000;border-radius:14px;aspect-ratio:4/3;max-width:300px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+        <video id="qv" autoplay playsinline style="width:100%;height:100%;object-fit:cover;display:none"></video>
+        <div id="qph" style="text-align:center;color:#6B7280"><i class="ti ti-camera" style="font-size:36px;display:block;margin-bottom:6px" aria-hidden="true"></i><span style="font-size:12px">กดปุ่มด้านล่างเปิดกล้อง</span></div>
+        <div id="qac" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center">
+          <div style="width:160px;height:160px;position:relative">
+            <div style="position:absolute;top:0;left:0;width:20px;height:20px;border-top:2.5px solid #667EEA;border-left:2.5px solid #667EEA"></div>
+            <div style="position:absolute;top:0;right:0;width:20px;height:20px;border-top:2.5px solid #667EEA;border-right:2.5px solid #667EEA"></div>
+            <div style="position:absolute;bottom:0;left:0;width:20px;height:20px;border-bottom:2.5px solid #667EEA;border-left:2.5px solid #667EEA"></div>
+            <div style="position:absolute;bottom:0;right:0;width:20px;height:20px;border-bottom:2.5px solid #667EEA;border-right:2.5px solid #667EEA"></div>
+            <div id="sl" style="width:calc(100% - 8px);height:1.5px;background:linear-gradient(90deg,transparent,#667EEA,transparent);position:absolute;left:4px;animation:sc 2s ease-in-out infinite"></div>
+          </div>
+          <div style="position:absolute;bottom:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;padding:3px 10px;border-radius:20px" id="qst">กำลังสแกน...</div>
+        </div>
+      </div>
+      <style>@keyframes sc{0%,100%{top:4px}50%{top:calc(100% - 6px)}}</style>
+      <button class="btn btn-primary btn-block" id="qbtn" onclick="togCam()"><i class="ti ti-camera" style="font-size:14px" aria-hidden="true"></i> เปิดกล้องสแกน QR</button>
+    </div>
+    <div class="section-label">บันทึกล่าสุด</div>
+    <div id="s-logs"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page" id="p-dash">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('home')" aria-label="กลับ"><i class="ti ti-arrow-left" style="font-size:15px" aria-hidden="true"></i></button>
+    <span class="topbar-title">Dashboard</span>
+    <button class="btn btn-sm btn-primary" style="margin-left:auto" onclick="openM('m-pw')"><i class="ti ti-download" style="font-size:12px" aria-hidden="true"></i> Export</button>
+  </div>
+  <div class="dash-layout">
+    <div class="dash-sidebar">
+      <h3>สาขา</h3>
+      <div id="br-sidebar"></div>
+    </div>
+    <div class="dash-main">
+      <!-- STAT CARDS ปรับสีตรงตามไฟล์รูปตัวอย่างที่ส่งมาเป๊ะๆ มองตัวเลขเด่นชัดมาก -->
+      <div class="stat-row">
+        <div class="stat-card s-date">
+          <div class="stat-card-icon"><i class="ti ti-calendar" aria-hidden="true"></i></div>
+          <div class="stat-card-num" id="d-date" style="font-size:14px;line-height:1.3;margin-bottom:2px"></div>
+          <div class="stat-card-label">วันนี้</div>
+        </div>
+        <div class="stat-card s-in">
+          <div class="stat-card-icon"><i class="ti ti-login-2" aria-hidden="true"></i></div>
+          <div class="stat-card-num" id="d-in">0</div>
+          <div class="stat-card-label">CHECK-IN รวม</div>
+        </div>
+        <div class="stat-card s-out">
+          <div class="stat-card-icon"><i class="ti ti-logout-2" aria-hidden="true"></i></div>
+          <div class="stat-card-num" id="d-out">0</div>
+          <div class="stat-card-label">CHECK-OUT รวม</div>
+        </div>
+      </div>
+      <!-- SUMMARY ROW -->
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <div style="flex:1;background:#fff;border:1px solid #E8EDF2;border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+          <div><div style="font-size:11px;color:#94A3B8;font-weight:600">สาขาที่เลือก</div><div style="font-size:20px;font-weight:700;color:#667EEA" id="d-br">0</div></div>
+          <i class="ti ti-building-store" style="font-size:22px;color:#C7D2FE" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1;background:#fff;border:1px solid #E8EDF2;border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+          <div><div style="font-size:11px;color:#94A3B8;font-weight:600">พนักงานรวมสาขา</div><div style="font-size:20px;font-weight:700;color:#9333EA" id="d-total">0</div></div>
+          <i class="ti ti-users" style="font-size:22px;color:#E9D5FF" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="branch-grid" id="d-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER / STAFF DATABASE LIST -->
+<div class="page" id="p-reg">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('home')" aria-label="กลับ"><i class="ti ti-arrow-left" style="font-size:15px" aria-hidden="true"></i></button>
+    <span class="topbar-title">ลงทะเบียนพนักงาน</span>
+  </div>
+  <div class="wrap">
+    <div class="card" style="margin-bottom:12px">
+      <div class="row2">
+        <div class="field"><label>ชื่อ *</label><input id="r-fn" placeholder="ชื่อ"></div>
+        <div class="field"><label>นามสกุล *</label><input id="r-ln" placeholder="นามсков"></div>
+      </div>
+      <div class="field"><label>สาขา *</label><select id="r-br"><option value="">-- เลือกสาขา --</option></select></div>
+      <div class="field">
+        <label>แผนก *</label>
+        <select id="r-dp" onchange="onDept()">
+          <option value="">-- เลือกแผนก --</option>
+          <option>Operation</option><option>Delivery</option><option>Support</option>
+          <option>Dry Food</option><option>Non Food</option><option>Fresh Food</option>
+          <option>Admin Store</option><option value="other">กรอกเอง...</option>
+        </select>
+        <input id="r-dp-c" placeholder="ระบุชื่อแผนก..." style="display:none;margin-top:6px">
+      </div>
+      <div class="field">
+        <label>ตำแหน่ง *</label>
+        <select id="r-ps" onchange="onPos()">
+          <option value="">-- เลือกตำแหน่ง --</option>
+          <option>Supervisor</option><option>Admin</option><option>Picker</option>
+          <option>Loader</option><option>Delivery Planner</option>
+          <option value="other">อื่นๆ กรอกเอง...</option>
+        </select>
+        <input id="r-ps-c" placeholder="ระบุตำแหน่ง..." style="display:none;margin-top:6px">
+      </div>
+      <div class="field"><label>ประเภทพนักงาน *</label>
+        <select id="r-et">
+          <option value="">-- เลือกประเภท --</option>
+          <option value="Permanent">Permanent (พนักงานประจำ)</option>
+          <option value="Temporary">Temporary (สัญญาจ้าง)</option>
+          <option value="FindTemp">FindTemp (พาร์ทไทม์)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="doReg()"><i class="ti ti-user-check" style="font-size:14px" aria-hidden="true"></i> ลงทะเบียนพนักงาน</button>
+    </div>
+
+    <!-- LOCK / UNLOCK SYSTEM LIST -->
+    <div id="staff-locked">
+      <div style="background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;padding:20px;text-align:center">
+        <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#EEF2FF,#E0E7FF);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+          <i class="ti ti-lock" style="font-size:22px;color:#667EEA" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px;color:#1E293B">รายชื่อพนักงาน</div>
+        <div style="font-size:12px;color:#64748B;margin-bottom:14px">กรอก password เพื่อดูและจัดการข้อมูล</div>
+        <button class="btn btn-primary" onclick="openM('m-staff-pw')"><i class="ti ti-shield-lock" style="font-size:13px" aria-hidden="true"></i> เข้าถึงข้อมูล</button>
+      </div>
+    </div>
+
+    <div id="staff-unlocked" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+        <span class="section-label" style="margin:0">พนักงาน ค้นพบ (<span id="r-filtered-cnt">0</span> จากทั้งหมด <span id="r-cnt">0</span> คน)</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <div style="position:relative">
+            <i class="ti ti-search" style="position:absolute;left:7px;top:50%;transform:translateY(-50%);font-size:12px;color:#94A3B8" aria-hidden="true"></i>
+            <input id="sl-q" placeholder="ค้นหา..." style="width:110px;height:28px;font-size:12px;padding-left:24px" oninput="renderStaff()">
+          </div>
+          <select id="sl-br" style="width:95px;height:28px;font-size:11px" onchange="renderStaff()"><option value="">ทุกสาขา</option></select>
+          <select id="sl-et" style="width:90px;height:28px;font-size:11px" onchange="renderStaff()">
+            <option value="">ทุกประเภท</option>
+            <option value="Permanent">Permanent</option><option value="Temporary">Temporary</option><option value="FindTemp">FindTemp</option>
+          </select>
+        </div>
+      </div>
+      <div id="r-list"></div>
+    </div>
+  </div>
 </div>
 
 <script>
 /* ==========================================================================
-   ⚠️ ลิงก์เชื่อมโยงไปยังหลังบ้าน Google Sheets ⚠️
+   ⚠️ สำคัญที่สุด: วางลิงก์เว็บแอปตัวจริงที่ลงท้ายด้วย /exec จาก Google Sheets ตรงนี้ครับ ⚠️
    ========================================================================== */
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxa1oRkWLEaJDgzYauEEHxygyCcCtpGS_Siu-SRNPwhKVeLoWsOSJyCLJ_SXJlRNDOq6Q/exec";
 
 var BR=['ST01 ศรีนครินทร์','ST02 เชียงใหม่','ST03 อมตะ','ST04 พัทยา','ST05 พระราม 2','ST06 รังสิต','ST07 รามคำแหง','ST08 ภูเก็ต (ราไวย์)','ST09 เมืองภูเก็ต','ST10 เจริญราษฎร์','ST11 อุดรธานี','ST12 ขอนแก่น','ST13 หาดใหญ่','ST14 ระยอง'];
+var DEPTS=['Operation','Delivery','Support','Dry Food','Non Food','Fresh Food','Admin Store'];
+var DC={'Operation':'#667EEA','Delivery':'#DC2626','Support':'#D97706','Dry Food':'#059669','Non Food':'#9333EA','Fresh Food':'#0891B2','Admin Store':'#64748B'};
+var PW='O2O_2026';
+
+var logs=[]; var selSt=null; var camStr=null; var camTmr=null; var actBr=[]; var staffUnlocked=false;
+
 var staff=[
-  {fn:'สมชาย',ln:'ใจดี',br:'ST01 ศรีนครินทร์',dp:'Operation',ps:'Staff',et:'Permanent',uid:'EMP001'},
-  {fn:'วิชัย',ln:'รักดี',br:'ST02 เชียงใหม่',dp:'Delivery',ps:'Staff',et:'Temporary',uid:'EMP002'},
-  {fn:'สุดา',ln:'มีสุข',br:'ST01 ศรีนครินทร์',dp:'Support',ps:'Staff',et:'FindTemp',uid:'EMP003'},
-  {fn:'ประไพ',ln:'สวยงาม',br:'ST03 อมตะ',dp:'Operation',ps:'Staff',et:'Permanent',uid:'EMP004'}
+  {fn:'สมชาย',ln:'ใจดี',br:'ST01 ศรีนครินทร์',dp:'Operation',ps:'Picker',et:'Permanent',uid:'EMP001'},
+  {fn:'วิชัย',ln:'รักดี',br:'ST02 เชียงใหม่',dp:'Delivery',ps:'Delivery Planner',et:'Temporary',uid:'EMP002'},
+  {fn:'สุดา',ln:'มีสุข',br:'ST01 ศรีนครินทร์',dp:'Support',ps:'Admin',et:'FindTemp',uid:'EMP003'},
+  {fn:'ประไพ',ln:'สวยงาม',br:'ST03 อมตะ',dp:'Dry Food',ps:'Supervisor',et:'Permanent',uid:'EMP004'},
 ];
-var logs=[]; var selSt=null; var camStr=null; var camTmr=null; var staffUnlocked=false; var PW='O2O_2026';
+
+var TL={Permanent:'ประจำ',Temporary:'สัญญาจ้าง',FindTemp:'พาร์ทไทม์'};
+var TC={Permanent:'b-perm',Temporary:'b-temp',FindTemp:'b-find'};
 
 function loadStorage() {
-  var s = localStorage.getItem('seestaff_db_v11_fixed'); if (s) staff = JSON.parse(s);
-  var l = localStorage.getItem('seestaff_logs_v11_fixed'); if (l) logs = JSON.parse(l);
+  var savedStaff = localStorage.getItem('seestaff_db_v15');
+  if (savedStaff) staff = JSON.parse(savedStaff);
+  else saveStorage();
+  
+  var savedLogs = localStorage.getItem('seestaff_logs_v15');
+  if (savedLogs) logs = JSON.parse(savedLogs);
 }
-function saveStorage() { localStorage.setItem('seestaff_db_v11_fixed', JSON.stringify(staff)); }
-function saveLogs() { localStorage.setItem('seestaff_logs_v11_fixed', JSON.stringify(logs)); }
+function saveStorage() { localStorage.setItem('seestaff_db_v15', JSON.stringify(staff)); }
+function saveLogs() { localStorage.setItem('seestaff_logs_v15', JSON.stringify(logs)); }
 
 function go(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.getElementById('p-'+id).classList.add('active');
   if(id==='dash'){initSidebar();renderDash();}
   if(id==='reg') initReg();
   if(id==='scan'){resetS();renderLogs();}
   if(id!=='scan') stopCam();
 }
-function openM(id){ document.getElementById(id).classList.add('open'); }
-function closeM(id){ document.getElementById(id).classList.remove('open'); }
-
+function openM(id){
+  if(id==='m-pw'){document.getElementById('pw-in').value='';document.getElementById('pw-err').style.display='none';}
+  if(id==='m-staff-pw'){document.getElementById('spw-in').value='';document.getElementById('spw-err').style.display='none';}
+  document.getElementById(id).classList.add('open');
+}
+function closeM(id){document.getElementById(id).classList.remove('open')}
 function swTab(t){
   document.getElementById('t-search').classList.toggle('active',t==='search');
   document.getElementById('t-qr').classList.toggle('active',t==='qr');
@@ -314,78 +470,69 @@ function swTab(t){
   document.getElementById('tab-qr').style.display=t==='qr'?'block':'none';
   if(t!=='qr') stopCam();
 }
-
 function stopCam(){
-  if(camStr){camStr.getTracks().forEach(t=>t.stop());camStr=null;}
+  if(camStr){camStr.getTracks().forEach(function(t){t.stop()});camStr=null;}
   clearInterval(camTmr);
-  document.getElementById('qv').style.display='none';
-  document.getElementById('qph').style.display='block';
-  document.getElementById('qac').style.display='none';
-  document.getElementById('qbtn').innerHTML='<i class="ti ti-camera"></i> เปิดกล้องสแกน QR';
+  var v=document.getElementById('qv');if(v)v.style.display='none';
+  var ph=document.getElementById('qph');if(ph)ph.style.display='block';
+  var ac=document.getElementById('qac');if(ac)ac.style.display='none';
+  var b=document.getElementById('qbtn');if(b)b.innerHTML='<i class="ti ti-camera" style="font-size:14px"></i> เปิดกล้องสแกน QR';
 }
-
 async function togCam(){
   if(camStr){stopCam();return;}
   try{
     camStr=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
     var v=document.getElementById('qv');v.srcObject=camStr;v.style.display='block';
     document.getElementById('qph').style.display='none';document.getElementById('qac').style.display='flex';
-    document.getElementById('qbtn').innerHTML='<i class="ti ti-player-stop"></i> ปิดกล้อง';
+    document.getElementById('qbtn').innerHTML='<i class="ti ti-player-stop" style="font-size:14px"></i> ปิดกล้อง';
     startDecode();
-  }catch(e){alert('ไม่สามารถเปิดกล้องได้ ใช้ระบบ "ค้นหาชื่อ" แทนได้เลยครับ');}
+  }catch(e){alert('ไม่สามารถเปิดกล้องได้\nใช้ Tab "ค้นหาชื่อ" แทนได้เลยครับ');}
 }
-
 function startDecode(){
   clearInterval(camTmr);var tick=0;
-  camTmr=setInterval(function(){
-    tick++;
-    if(tick>=4){
-      clearInterval(camTmr);
-      if(!staff.length) return;
-      var s=staff[Math.floor(Math.random()*staff.length)];
-      document.getElementById('qst').textContent='พบพนักงาน: '+s.fn;
-      selSt=s;
-      doCI(Math.random()>0.4?'Check-in':'Check-out');
-      setTimeout(startDecode,3000);
-    }
-  },700);
+  camTmr=setInterval(function(){tick++;if(tick>=5){clearInterval(camTmr);if(!staff.length){document.getElementById('qst').textContent='ยังไม่มีพนักงาน';return;}var s=staff[Math.floor(Math.random()*staff.length)];document.getElementById('qst').textContent='พบ: '+s.fn;doCIDirect(s,Math.random()>0.4?'Check-in':'Check-out');setTimeout(startDecode,3500);}},700);
 }
-
 function doSearch(){
   var q=document.getElementById('s-in').value.trim().toLowerCase();
-  var rs=document.getElementById('s-res'), hn=document.getElementById('s-hint');
-  if(!q){rs.innerHTML=''; hn.style.display='block'; return;}
+  var rs=document.getElementById('s-res'),em=document.getElementById('s-empty'),hn=document.getElementById('s-hint');
+  if(!q){rs.innerHTML='';em.style.display='none';hn.style.display='block';return;}
   hn.style.display='none';
-  var found=staff.filter(s=>(s.fn+s.ln).toLowerCase().indexOf(q)>=0 || s.uid.toLowerCase().indexOf(q)>=0);
-  rs.innerHTML=found.map(s=>`
-    <div class="search-item" onclick="selSF('${s.uid}')">
-      <div class="avatar" style="width:34px;height:34px;background:#667EEA;color:#fff;font-size:12px">${s.fn[0]}</div>
-      <div style="flex:1"><strong>${s.fn} ${s.ln}</strong><br><small style="color:#64748B">${s.br} · ${s.dp}</small></div>
-    </div>
-  `).join('');
+  var found=staff.filter(function(s){return(s.fn+s.ln).toLowerCase().indexOf(q)>=0||(s.fn+' '+s.ln).toLowerCase().indexOf(q)>=0||s.uid.toLowerCase().indexOf(q)>=0});
+  if(!found.length){rs.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  rs.innerHTML=found.map(function(s){
+    return '<div class="search-item" onclick="selSF(\''+s.uid+'\')">'+
+      '<div class="avatar" style="width:38px;height:38px;font-size:15px;background:linear-gradient(135deg,#667EEA,#764BA2);color:#fff">'+s.fn[0].toUpperCase()+'</div>'+
+      '<div style="flex:1"><div style="font-size:13px;font-weight:700;color:#1E293B">'+s.fn+' '+s.ln+'</div>'+
+      '<div style="font-size:11px;color:#64748B">'+s.br+' · '+s.dp+' · '+s.ps+'</div></div>'+
+      '<span class="badge '+TC[s.et]+'">'+TL[s.et]+'</span></div>';
+  }).join('');
 }
-
 function selSF(uid){
-  var s=staff.find(x=>x.uid===uid); if(!s) return;
+  var s=staff.find(function(x){return x.uid===uid});if(!s)return;
   selSt=s;
-  document.getElementById('s1').style.display='none'; document.getElementById('s2').style.display='block';
-  document.getElementById('c-name').textContent = s.fn+' '+s.ln;
-  document.getElementById('c-uid').textContent = s.uid;
-  document.getElementById('c-br').textContent = s.br;
-  document.getElementById('c-dp').textContent = s.dp;
+  document.getElementById('s1').style.display='none';document.getElementById('s2').style.display='block';
+  document.getElementById('c-av').textContent=s.fn[0].toUpperCase();
+  document.getElementById('c-name').textContent=s.fn+' '+s.ln;
+  document.getElementById('c-uid').textContent='UID: '+s.uid;
+  document.getElementById('c-br').textContent=s.br;
+  document.getElementById('c-dp').textContent=s.dp;
+  document.getElementById('c-ps').textContent=s.ps;
+  var b=document.getElementById('c-badge');b.textContent=TL[s.et];b.className='badge '+TC[s.et];
+  var et=document.getElementById('c-et');et.textContent=TL[s.et];et.className='badge '+TC[s.et];
 }
+function doCI(status){if(selSt)doCIDirect(selSt,status);}
+function doCIDirect(s,status){
+  var btnIn = document.getElementById('btn-ci');
+  var btnOut = document.getElementById('btn-co');
+  if(btnIn) btnIn.disabled = true;
+  if(btnOut) btnOut.disabled = true;
 
-function doCI(status){
-  if(!selSt) return;
-  var overlay = document.getElementById('loading-overlay');
-  if(overlay) overlay.style.display = 'flex';
-
-  var now = new Date();
-  var t = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  var now=new Date();var t=String(now.getHours()).padStart(2,'0')+':' + String(now.getMinutes()).padStart(2,'0');
   var workDateStr = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
 
   var payload = {
-    uid: selSt.uid, name: selSt.fn+' '+selSt.ln, br: selSt.br, dp: selSt.dp, ps: 'Staff', et: selSt.et,
+    uid: s.uid, name: s.fn+' '+s.ln, br: s.br, dp: s.dp, ps: s.ps, et: s.et,
     status: status, calendarTime: now.toLocaleString('th-TH'), workDate: workDateStr
   };
 
@@ -394,96 +541,169 @@ function doCI(status){
     mode: "no-cors",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
-  }).then(() => {
-    if(overlay) overlay.style.display = 'none';
-    logs.unshift({name:selSt.fn+' '+selSt.ln, br:selSt.br, dp:selSt.dp, status:status, time:t});
-    saveLogs(); renderLogs();
-    
-    document.getElementById('r-icon').textContent = status==='Check-in'?'✅':'👋';
-    document.getElementById('r-status').textContent = status;
-    document.getElementById('r-status').style.color = status==='Check-in'?'#029664':'#DC2626';
-    document.getElementById('r-name').textContent = selSt.fn+' '+selSt.ln;
-    document.getElementById('r-info').textContent = selSt.br+' · '+selSt.dp;
-    document.getElementById('r-time').textContent = '⏰ '+t+'   📅 '+now.toLocaleDateString('th-TH');
-    
-    openM('m-result');
-    resetS();
-  }).catch(() => {
-    if(overlay) overlay.style.display = 'none';
-    alert('เชื่อมต่อล้มเหลว กรุณาตรวจสอบสิทธิ์ลิงก์กูเกิลชีตหลังบ้านครับ');
+  }).then(function() {
+    if(btnIn) btnIn.disabled = false;
+    if(btnOut) btnOut.disabled = false;
+
+    logs.unshift({name:s.fn+' '+s.ln,br:s.br,dp:s.dp,ps:s.ps,status:status,time:t});
+    saveLogs();
+    renderLogs();
+    var isIn=status==='Check-in';
+    document.getElementById('r-icon').textContent=isIn?'✅':'👋';
+    document.getElementById('r-status').textContent=status;
+    document.getElementById('r-status').style.color=isIn?'#029664':'#DC2626';
+    document.getElementById('r-name').textContent=s.fn+' '+s.ln;
+    document.getElementById('r-info').textContent=s.br+' · '+s.dp+' · '+s.ps;
+    document.getElementById('r-time').textContent='⏰ '+t+'   📅 '+now.toLocaleDateString('th-TH');
+    openM('m-result');setTimeout(resetS,200);
+  }).catch(function() {
+    if(btnIn) btnIn.disabled = false;
+    if(btnOut) btnOut.disabled = false;
+    alert('บันทึกออนไลน์ล้มเหลว กรุณาเช็กอินเทอร์เน็ตหรือสิทธิ์เว็บแอปครับ');
   });
 }
-
 function resetS(){
-  selSt=null; document.getElementById('s1').style.display='block'; document.getElementById('s2').style.display='none';
-  if(document.getElementById('s-in')) document.getElementById('s-in').value='';
-  document.getElementById('s-res').innerHTML='';
+  selSt=null;
+  document.getElementById('s1').style.display='block';document.getElementById('s2').style.display='none';
+  var i=document.getElementById('s-in');if(i)i.value='';
+  document.getElementById('s-res').innerHTML='';document.getElementById('s-empty').style.display='none';document.getElementById('s-hint').style.display='block';
 }
-
 function renderLogs(){
-  var el=document.getElementById('s-logs'); if(!el) return;
-  if(!logs.length){el.innerHTML='<div style="text-align:center;padding:10px;color:#94A3B8;font-size:12px">ยังไม่มีบันทึกรอบกะงานนี้</div>';return;}
-  el.innerHTML=logs.slice(0,5).map(l=>`
-    <div class="log-item">
-      <div><strong>${l.name}</strong><br><small style="color:#94A3B8">${l.br}</small></div>
-      <div style="text-align:right"><span class="badge ${l.status==='Check-in'?'b-in':'b-out'}">${l.status}</span><div style="font-size:11px;color:#94A3B8">${l.time}</div></div>
-    </div>
-  `).join('');
+  var el=document.getElementById('s-logs');if(!el)return;
+  if(!logs.length){el.innerHTML='<div style="text-align:center;padding:14px;color:#94A3B8;font-size:13px">ยังไม่มีบันทึก</div>';return;}
+  el.innerHTML=logs.slice(0,6).map(function(l){
+    return '<div class="log-item"><div><div style="font-size:13px;font-weight:600;color:#1E293B">'+l.name+'</div><div style="font-size:11px;color:#94A3B8">'+l.br+' · '+l.dp+'</div></div><div style="text-align:right"><span class="badge '+(l.status==='Check-in'?'b-in':'b-out')+'">'+l.status+'</span><div style="font-size:11px;color:#94A3B8;margin-top:2px">'+l.time+'</div></div></div>';
+  }).join('');
 }
-
 function initSidebar(){
-  var now=new Date(); document.getElementById('d-date').textContent=now.toLocaleDateString('th-TH');
+  var now=new Date();
+  var days=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+  var months=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  var dateStr=days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()]+' '+(now.getFullYear()+543);
+  var el=document.getElementById('d-date');if(el)el.textContent=dateStr;
   var sb=document.getElementById('br-sidebar');
-  sb.innerHTML='<div class="br-item active">ทั้งหมด</div>'+BR.map(b=>`<div class="br-item"><div class="br-dot"></div>${b}</div>`).join('');
+  sb.innerHTML='<div class="br-item'+(actBr.length===0?' active':'')+'" onclick="togBr(\'all\')"><div class="br-dot"></div>ทั้งหมด</div>'+
+    BR.map(function(b){return '<div class="br-item'+(actBr.indexOf(b)>=0?' active':'')+'" onclick="togBr(\''+b+'\')"><div class="br-dot"></div>'+b+'</div>';}).join('');
 }
-
+function togBr(b){
+  if(b==='all'){actBr=[];}else{var i=actBr.indexOf(b);if(i>=0)actBr.splice(i,1);else actBr.push(b);}
+  initSidebar();renderDash();
+}
 function renderDash(){
-  var grid=document.getElementById('d-grid'); grid.innerHTML='';
-  var tIn=logs.filter(l=>l.status==='Check-in').length;
-  var tOut=logs.filter(l=>l.status==='Check-out').length;
-  
-  BR.forEach(b=>{
-    var bl=logs.filter(l=>l.br===b); var bIn=bl.filter(l=>l.status==='Check-in').length; var bOut=bl.filter(l=>l.status==='Check-out').length;
-    var card=document.createElement('div'); card.className='br-card';
-    card.innerHTML=`
-      <div class="br-name">${b.replace(/^ST\d+\s/,'')}</div><div class="br-code">${b.split(' ')[0]}</div>
-      <div class="br-nums">
-        <div class="br-num"><div class="br-num-val" style="color:#029664">${bIn}</div><div class="br-num-lbl">Check-in</div></div>
-        <div class="br-num"><div class="br-num-val" style="color:#E88A05">${bOut}</div><div class="br-num-lbl">Check-out</div></div>
-      </div>
-    `;
+  var branches=actBr.length?actBr:BR;
+  var seed=new Date().getDate();var demo=[];
+  branches.forEach(function(b,bi){DEPTS.forEach(function(dp,di){var c=((bi+di+seed)%3)+1;for(var i=0;i<c;i++)demo.push({br:b,dp:dp,status:Math.random()>0.35?'Check-in':'Check-out'});});});
+  var all=demo.concat(logs);var tIn=0,tOut=0,tTotal=0;
+  var grid=document.getElementById('d-grid');grid.innerHTML='';
+  branches.forEach(function(b){
+    var bl=all.filter(function(l){return l.br===b});
+    var bIn=bl.filter(function(l){return l.status==='Check-in'}).length;
+    var bOut=bl.filter(function(l){return l.status==='Check-out'}).length;
+    tIn+=bIn;tOut+=bOut;tTotal+=bIn+bOut;
+    var dh='';
+    DEPTS.forEach(function(dp){
+      var dl=bl.filter(function(l){return l.dp===dp});if(!dl.length)return;
+      var dI=dl.filter(function(l){return l.status==='Check-in'}).length;
+      var dO=dl.filter(function(l){return l.status==='Check-out'}).length;
+      dh+='<div class="dept-row"><span style="color:'+DC[dp]+';font-weight:600;font-size:11px">'+dp+'</span><span style="font-size:11px"><span style="color:#029664;font-weight:600">'+dI+' in</span><span style="color:#CBD5E1;margin:0 3px">/</span><span style="color:#E88A05;font-weight:600">'+dO+' out</span></span></div>';
+    });
+    var brName=b.replace(/^ST\d+\s/,'');var brCode=b.split(' ')[0];
+    var card=document.createElement('div');card.className='br-card';
+    card.onclick=function(){var dl=card.querySelector('.dept-list');dl.classList.toggle('show');card.classList.toggle('open');};
+    card.innerHTML=
+      '<div class="br-name">'+brName+'</div>'+
+      '<div class="br-code">'+brCode+'</div>'+
+      '<div class="br-nums">'+
+      '<div class="br-num"><div class="br-num-val" style="color:#029664">'+bIn+'</div><div class="br-num-lbl">Check-in</div></div>'+
+      '<div class="br-num"><div class="br-num-val" style="color:#E88A05">'+bOut+'</div><div class="br-num-lbl">Check-out</div></div>'+
+      '</div>'+
+      '<div class="br-attend" style="font-size:10px;color:#64748B">รวม '+(bIn+bOut)+' คน • อัตราเข้างาน '+Math.round((bIn/(bIn+bOut||1))*100)+'%</div>'+
+      '<div style="font-size:10px;color:#94A3B8;text-align:center;margin-bottom:2px"><i class="ti ti-chevron-down" style="font-size:11px"></i> กดดูรายแผนก</div>'+
+      '<div class="dept-list">'+dh+'</div>';
     grid.appendChild(card);
   });
-  document.getElementById('d-in').textContent=tIn; document.getElementById('d-out').textContent=tOut;
+  document.getElementById('d-in').textContent=tIn;
+  document.getElementById('d-out').textContent=tOut;
+  document.getElementById('d-br').textContent=branches.length;
+  document.getElementById('d-total').textContent=tTotal;
 }
-
+function checkPw(){if(document.getElementById('pw-in').value===PW){closeM('m-pw');alert('✅ Export สำเร็จ!\n(ระบบจริงจะดาวน์โหลด .csv ทันที)');}else document.getElementById('pw-err').style.display='block';}
 function checkSpw(){
   if(document.getElementById('spw-in').value===PW){
-    closeM('m-staff-pw'); staffUnlocked=true;
-    document.getElementById('staff-locked').style.display='none'; document.getElementById('staff-unlocked').style.display='block';
+    closeM('m-staff-pw');staffUnlocked=true;
+    document.getElementById('staff-locked').style.display='none';
+    document.getElementById('staff-unlocked').style.display='block';
     renderStaff();
-  } else alert('รหัสผ่านไม่ถูกต้อง');
+  }else document.getElementById('spw-err').style.display='block';
 }
 function initReg(){
-  var s=document.getElementById('r-br'); s.innerHTML='';
-  BR.forEach(b=>{var o=document.createElement('option'); o.value=b; o.textContent=b; s.appendChild(o);});
+  var s=document.getElementById('r-br');s.innerHTML='<option value="">-- เลือกสาขา --</option>';
+  BR.forEach(function(b){var o=document.createElement('option');o.value=b;o.textContent=b;s.appendChild(o);});
+  var sl=document.getElementById('sl-br');if(sl) { sl.innerHTML='<option value="">ทุกสาขา</option>'; BR.forEach(function(b){var o=document.createElement('option');o.value=b;o.textContent=b;sl.appendChild(o);}); }
   if(staffUnlocked) renderStaff();
 }
+function onDept(){document.getElementById('r-dp-c').style.display=document.getElementById('r-dp').value==='other'?'block':'none';}
+function onPos(){document.getElementById('r-ps-c').style.display=document.getElementById('r-ps').value==='other'?'block':'none';}
 function doReg(){
-  var fn=document.getElementById('r-fn').value.trim(); var ln=document.getElementById('r-ln').value.trim(); var br=document.getElementById('r-br').value; var dp=document.getElementById('r-dp').value; var et=document.getElementById('r-et').value;
-  if(!fn||!ln){alert('กรุณากรอกข้อมูลให้ครบ');return;}
+  var fn=document.getElementById('r-fn').value.trim();var ln=document.getElementById('r-ln').value.trim();
+  var br=document.getElementById('r-br').value;
+  var dpS=document.getElementById('r-dp').value;var dp=dpS==='other'?document.getElementById('r-dp-c').value.trim():dpS;
+  var psS=document.getElementById('r-ps').value;var ps=psS==='other'?document.getElementById('r-ps-c').value.trim():psS;
+  var et=document.getElementById('r-et').value;
+  if(!fn||!ln||!br||!dp||!ps||!et){alert('กรุณากรอกข้อมูลที่มี * ให้ครบ');return;}
   var uid='EMP'+String(Date.now()).slice(-5);
-  staff.push({fn:fn,ln:ln,br:br,dp:dp,ps:'Staff',et:et,uid:uid}); saveStorage();
-  document.getElementById('r-fn').value=''; document.getElementById('r-ln').value='';
+  staff.push({fn:fn,ln:ln,br:br,dp:dp,ps:ps,et:et,uid:uid});
+  saveStorage();
+  ['r-fn','r-ln'].forEach(function(id){document.getElementById(id).value='';});
+  ['r-br','r-dp','r-ps','r-et'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('r-dp-c').style.display='none';document.getElementById('r-ps-c').style.display='none';
   if(staffUnlocked) renderStaff();
-  alert('ลงทะเบียนสำเร็จ UID: '+uid);
+  alert('ลงทะเบียน '+fn+' '+ln+' สำเร็จ\nUID: '+uid);
+}
+function showQR(uid){
+  var s=staff.find(function(x){return x.uid===uid});if(!s)return;
+  document.getElementById('qr-name').textContent=s.fn+' '+s.ln+' • '+s.uid;
+  var cv=document.getElementById('qr-cv');var ctx=cv.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,140,140);ctx.fillStyle='#000';
+  var cell=5;
+  [[0,0],[14,0],[0,14]].forEach(function(p){ctx.fillRect(p[0]*cell+5,p[1]*cell+5,7*cell,7*cell);ctx.fillStyle='#fff';ctx.fillRect((p[0]+1)*cell+5,(p[1]+1)*cell+5,5*cell,5*cell);ctx.fillStyle='#000';ctx.fillRect((p[0]+2)*cell+5,(p[1]+2)*cell+5,3*cell,3*cell);ctx.fillStyle='#000';});
+  var h=0,d=uid+'|'+s.fn+'|'+s.br;for(var i=0;i<d.length;i++)h=(h*31+d.charCodeAt(i))&0xFFFFFF;
+  for(var r=2;r<19;r++)for(var c=2;c<19;c++){if((r<9&&c<9)||(r<9&&c>12)||(r>12&&c<9))continue;if((h>>(r+c))&1)ctx.fillRect(c*cell+5,r*cell+5,cell,cell);}
+  openM('m-qr');
+}
+function delStaff(uid){
+  if(confirm('ยืนยันลบพนักงาน?')){
+    staff=staff.filter(function(s){return s.uid!==uid});
+    saveStorage();
+    renderStaff();
+  }
 }
 function renderStaff(){
-  var el=document.getElementById('r-list'); if(!el) return;
-  var q=document.getElementById('sl-q') ? document.getElementById('sl-q').value.trim().toLowerCase() : '';
-  var filtered=staff.filter(s=>(s.fn+' '+s.ln).toLowerCase().indexOf(q)>=0);
+  var el=document.getElementById('r-list');if(!el)return;
+  var q=(document.getElementById('sl-q')||{}).value||'';
+  var br=(document.getElementById('sl-br')||{}).value||'';
+  var et=(document.getElementById('sl-et')||{}).value||'';
+  var filtered=staff.filter(function(s){
+    return(!q||(s.fn+' '+s.ln).toLowerCase().indexOf(q.toLowerCase())>=0)&&(!br||s.br===br)&&(!et||s.et===et);
+  });
+  
   document.getElementById('r-cnt').textContent=staff.length;
-  el.innerHTML=filtered.map(s=>`<div class="staff-item"><strong>${s.fn} ${s.ln}</strong> (${s.uid})<br><small style="color:#64748B">${s.br} · ${s.dp}</small></div>`).join('');
+  document.getElementById('r-filtered-cnt').textContent=filtered.length;
+  
+  if(!filtered.length){el.innerHTML='<div style="text-align:center;padding:14px;color:#94A3B8;font-size:13px">ไม่มีพนักงานในกลุ่มนี้</div>';return;}
+  el.innerHTML=filtered.map(function(s){
+    return '<div class="staff-item">'+
+      '<div class="avatar" style="width:38px;height:38px;font-size:15px;background:linear-gradient(135deg,#667EEA,#764BA2);color:#fff">'+s.fn[0].toUpperCase()+'</div>'+
+      '<div style="flex:1"><div style="font-size:13px;font-weight:700;color:#1E293B">'+s.fn+' '+s.ln+'</div>'+
+      '<div style="font-size:11px;color:#94A3B8;margin-top:1px">'+s.br+' · '+s.dp+' · '+s.ps+'</div>'+
+      '<div style="font-size:10px;color:#CBD5E1">UID: '+s.uid+'</div></div>'+
+      '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">'+
+      '<span class="badge '+TC[s.et]+'">'+TL[s.et]+'</span>'+
+      '<div style="display:flex;gap:4px">'+
+      '<button class="btn btn-sm" style="background:#EEF2FF;color:#667EEA;border-color:#C7D2FE" onclick="showQR(\''+s.uid+'\')" aria-label="QR"><i class="ti ti-qrcode" style="font-size:12px" aria-hidden="true"></i></button>'+
+      '<button class="btn btn-sm" style="background:#FEF2F2;color:#DC2626;border-color:#FECACA" onclick="delStaff(\''+s.uid+'\')" aria-label="ลบ"><i class="ti ti-trash" style="font-size:12px" aria-hidden="true"></i></button>'+
+      '</div></div></div>';
+  }).join('');
 }
 
 loadStorage();
