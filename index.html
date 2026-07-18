@@ -84,11 +84,13 @@
     .staff-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid #E8EDF2;border-radius:10px;margin-bottom:6px}
     .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
     .section-label{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin:14px 0 8px}
+    
+    /* Wording เดิม: ปุ่มหน้าแรก */
     .home-nav-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;cursor:pointer;width:100%;text-align:left}
     .home-nav-btn:hover{border-color:#667EEA;box-shadow:0 4px 14px rgba(102,126,234,0.1)}
     .nav-icon-box{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
     
-    /* 🚨 MODAL FIXED STYLES - ป้องกันการกางแผ่กระจาย */
+    /* MODAL FIXED - ซ่อนเด็ดขาด */
     .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.5);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
     .modal-wrap.open{display:flex !important}
     .modal-box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:340px;border:1px solid #E8EDF2;box-shadow:0 20px 60px rgba(0,0,0,0.15);color:#1E293B;text-align:left}
@@ -100,35 +102,8 @@
 
 <div id="loading-overlay">⏳ กำลังบันทึกข้อมูลเข้า Google Sheets ปลอดภัย...</div>
 
-<!-- MODALS -->
-<div class="modal-wrap" id="m-pw">
-  <div class="modal-box">🔒 Admin Only<br><button class="btn btn-block" style="margin-top:10px" onclick="closeM('m-pw')">ปิด</button></div>
-</div>
-
-<div class="modal-wrap" id="m-staff-pw">
-  <div class="modal-box">
-    🛡️ ปลดล็อกรายชื่อพนักงาน
-    <div class="field" style="margin-top:10px"><label>Password</label><input type="password" id="spw-in" placeholder="กรอก password" onkeydown="if(event.key==='Enter')checkSpw()"></div>
-    <div style="display:flex;gap:8px"><button class="btn btn-primary btn-block" onclick="checkSpw()">ยืนยัน</button><button class="btn btn-block" onclick="closeM('m-staff-pw')">ยกเลิก</button></div>
-  </div>
-</div>
-
-<div class="modal-wrap" id="m-result">
-  <div class="modal-box" style="text-align:center">
-    <div id="r-icon" style="font-size:48px;margin-bottom:8px"></div>
-    <div id="r-status" style="font-size:20px;font-weight:700;margin-bottom:6px"></div>
-    <div id="r-name" style="font-size:15px;font-weight:600;"></div>
-    <div id="r-info" style="font-size:12px;color:#64748B;margin-top:3px"></div>
-    <div id="r-time" style="font-size:12px;color:#94A3B8;background:#F8FAFC;border-radius:8px;padding:6px 10px;margin-top:10px"></div>
-    <button class="btn btn-primary btn-block" style="margin-top:14px" onclick="closeM('m-result')">ตกลง</button>
-  </div>
-</div>
-
-<div class="modal-wrap" id="m-qr">
-  <div class="modal-box" style="text-align:center">QR Code System Offline<br><button class="btn btn-block" style="margin-top:14px" onclick="closeM('m-qr')">ปิด</button></div>
-</div>
-
-<!-- MAIN PAGE APPLICATION -->
+<!-- APP PAGES -->
+<!-- Wording เดิม: หน้าแรก -->
 <div class="page active" id="p-home">
   <div style="background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%);padding:24px 16px 32px;color:#fff">
     <div style="font-size:20px;font-weight:700">See Staff Cloud</div>
@@ -184,7 +159,7 @@
 
 <!-- DASHBOARD -->
 <div class="page" id="p-dash">
-  <div class="topbar"><button class="back-btn" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><span class="topbar-title">Dashboard</span></div>
+  <div class="topbar"><button class="back-btn" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><span class="topbar-title">Dashboard หน้ากากรายงาน</span></div>
   <div class="dash-layout">
     <div class="dash-sidebar"><h3>สาขา</h3><div id="br-sidebar"></div></div>
     <div class="dash-main">
@@ -200,7 +175,7 @@
 
 <!-- REGISTER -->
 <div class="page" id="p-reg">
-  <div class="topbar"><button class="back-btn" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><span class="topbar-title">ฐานข้อมูลพนักงาน</span></div>
+  <div class="topbar"><button class="back-btn" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><span class="topbar-title">ลงทะเบียน / ดูรายชื่อพนักงาน</span></div>
   <div class="wrap">
     <div class="card" style="margin-bottom:12px">
       <div class="row2">
@@ -224,26 +199,58 @@
       <button class="btn btn-sm btn-primary" onclick="openM('m-staff-pw')">เข้าถึงข้อมูล</button>
     </div>
     <div id="staff-unlocked" style="display:none">
+      <div class="field" style="margin-bottom: 8px;">
+        <label>ค้นหารายชื่อพนักงาน</label>
+        <input id="sl-q" placeholder="พิมพ์ชื่อเพื่อกรองรายชื่อ..." oninput="renderStaff()">
+      </div>
       <div class="section-label">พนักงานในระบบ (<span id="r-cnt">0</span> คน)</div>
       <div id="r-list"></div>
     </div>
   </div>
 </div>
 
+<!-- MODALS CONTAINER -->
+<div class="modal-wrap" id="m-pw">
+  <div class="modal-box">🔒 Admin Only<br><button class="btn btn-block" style="margin-top:10px" onclick="closeM('m-pw')">ปิด</button></div>
+</div>
+
+<div class="modal-wrap" id="m-staff-pw">
+  <div class="modal-box">
+    🛡️ ปลดล็อกรายชื่อพนักงาน
+    <div class="field" style="margin-top:10px"><label>Password</label><input type="password" id="spw-in" placeholder="กรอก password" onkeydown="if(event.key==='Enter')checkSpw()"></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-primary btn-block" onclick="checkSpw()">ยืนยัน</button><button class="btn btn-block" onclick="closeM('m-staff-pw')">ยกเลิก</button></div>
+  </div>
+</div>
+
+<div class="modal-wrap" id="m-result">
+  <div class="modal-box" style="text-align:center">
+    <div id="r-icon" style="font-size:48px;margin-bottom:8px"></div>
+    <div id="r-status" style="font-size:20px;font-weight:700;margin-bottom:6px"></div>
+    <div id="r-name" style="font-size:15px;font-weight:600;"></div>
+    <div id="r-info" style="font-size:12px;color:#64748B;margin-top:3px"></div>
+    <div id="r-time" style="font-size:12px;color:#94A3B8;background:#F8FAFC;border-radius:8px;padding:6px 10px;margin-top:10px"></div>
+    <button class="btn btn-primary btn-block" style="margin-top:14px" onclick="closeM('m-result')">ตกลง</button>
+  </div>
+</div>
+
+<div class="modal-wrap" id="m-qr">
+  <div class="modal-box" style="text-align:center">QR Code System Offline<br><button class="btn btn-block" style="margin-top:14px" onclick="closeM('m-qr')">ปิด</button></div>
+</div>
+
 <script>
 /* ==========================================================================
-   ⚠️ สำคัญที่สุด: วางลิงก์เว็บแอปตัวจริงที่ลงท้ายด้วย /exec จาก Google Sheets ตรงนี้ครับ ⚠️
+   ⚠️ ลิงก์เชื่อมโยงไปยังหลังบ้าน Google Sheets ⚠️
    ========================================================================== */
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxa1oRkWLEaJDgzYauEEHxygyCcCtpGS_Siu-SRNPwhKVeLoWsOSJyCLJ_SXJlRNDOq6Q/exec";
 
 var BR=['ST01 ศรีนครินทร์','ST02 เชียงใหม่','ST03 อมตะ','ST04 พัทยา','ST05 พระราม 2','ST06 รังสิต','ST07 รามคำแหง','ST08 ภูเก็ต (ราไวย์)','ST09 เมืองภูเก็ต','ST10 เจริญราษฎร์','ST11 อุดรธานี','ST12 ขอนแก่น','ST13 หาดใหญ่','ST14 ระยอง'];
 var staff=[
-  {fn:'สมชาย',ln:'ใจดี',br:'ST01 ศรีนครินทร์',dp:'Operation',ps:'Picker',et:'Permanent',uid:'EMP001'},
-  {fn:'วิชัย',ln:'รักดี',br:'ST02 เชียงใหม่',dp:'Delivery',ps:'Delivery Planner',et:'Temporary',uid:'EMP002'},
-  {fn:'สุดา',ln:'มีสุข',br:'ST01 ศรีนครินทร์',dp:'Support',ps:'Admin',et:'FindTemp',uid:'EMP003'},
-  {fn:'ประไพ',ln:'สวยงาม',br:'ST03 อมตะ',dp:'Dry Food',ps:'Supervisor',et:'Permanent',uid:'EMP004'}
+  {fn:'สมชาย',ln:'ใจดี',br:'ST01 ศรีนครินทร์',dp:'Operation',ps:'Staff',et:'Permanent',uid:'EMP001'},
+  {fn:'วิชัย',ln:'รักดี',br:'ST02 เชียงใหม่',dp:'Delivery',ps:'Staff',et:'Temporary',uid:'EMP002'},
+  {fn:'สุดา',ln:'มีสุข',br:'ST01 ศรีนครินทร์',dp:'Support',ps:'Staff',et:'FindTemp',uid:'EMP003'},
+  {fn:'ประไพ',ln:'สวยงาม',br:'ST03 อมตะ',dp:'Operation',ps:'Staff',et:'Permanent',uid:'EMP004'}
 ];
-var logs=[]; var selSt=null; var actBr=[]; var staffUnlocked=false; var PW='O2O_2026';
+var logs=[]; var selSt=null; var staffUnlocked=false; var PW='O2O_2026';
 
 function loadStorage() {
   var s = localStorage.getItem('seestaff_db_v11_fixed'); if (s) staff = JSON.parse(s);
