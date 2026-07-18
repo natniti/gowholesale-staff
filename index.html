@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>See Staff v11 - Stable Online Version</title>
+  <title>See Staff v11 - Fully Stable Cloud Version</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
@@ -12,10 +12,14 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Inter', 'Noto Sans Thai', sans-serif;background:#F0F4F8;color:#1E293B;min-height:400px}
     .page{display:none}.page.active{display:block}
+    
+    /* TOPBAR */
     .topbar{display:flex;align-items:center;gap:10px;padding:11px 16px;background:#fff;border-bottom:1px solid #E8EDF2;position:sticky;top:0;z-index:10}
     .back-btn{width:30px;height:30px;border-radius:8px;border:1px solid #E8EDF2;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#64748B;flex-shrink:0}
     .back-btn:hover{background:#F8FAFC}
     .topbar-title{font-size:14px;font-weight:600;color:#1E293B}
+    
+    /* BUTTONS */
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #E2E8F0;background:#fff;color:#374151;padding:0 14px;height:34px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;transition:all 0.15s;white-space:nowrap}
     .btn:hover{background:#F8FAFC}.btn:active{transform:scale(0.97)}
     .btn-primary{background:linear-gradient(135deg,#667EEA,#764BA2);color:#fff;border:none}
@@ -24,12 +28,15 @@
     .btn-sm{height:28px;padding:0 10px;font-size:12px}
     .btn-lg{height:46px;padding:0 18px;font-size:14px;border-radius:10px}
     .btn-block{width:100%}
+    
     .wrap{max-width:680px;margin:0 auto;padding:14px}
     .card{background:#fff;border:1px solid #E8EDF2;border-radius:14px;padding:16px}
     .field{margin-bottom:10px}.field label{display:block;font-size:11px;font-weight:600;color:#64748B;margin-bottom:3px;text-transform:uppercase}
     input,select{display:block;width:100%;height:36px;padding:0 10px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;color:#1E293B;outline:none}
     input:focus,select:focus{border-color:#667EEA;background:#fff}
     .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    
+    /* STAT CARDS */
     .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
     @media(max-width:540px){.stat-row{grid-template-columns:1fr}}
     .stat-card{border-radius:16px;padding:16px 20px;color:#fff;position:relative;overflow:hidden}
@@ -39,6 +46,8 @@
     .s-date{background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%)}
     .s-in{background:linear-gradient(135deg,#029664 0%,#026B4A 100%);color:#ffffff}
     .s-out{background:linear-gradient(135deg,#E88A05 0%,#A35902 100%);color:#ffffff}
+    
+    /* SIDEBAR LAYOUT */
     .dash-layout{display:flex;height:calc(100vh - 49px);overflow:hidden}
     .dash-sidebar{width:185px;min-width:150px;border-right:1px solid #E8EDF2;background:#fff;overflow-y:auto;padding:12px 8px;flex-shrink:0}
     .dash-sidebar h3{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:8px;padding:0 6px}
@@ -47,6 +56,7 @@
     .br-item.active{background:linear-gradient(135deg,#EEF2FF,#F0F4FF);color:#667EEA;font-weight:600}
     .br-dot{width:6px;height:6px;border-radius:50%;background:#CBD5E1;flex-shrink:0}
     .br-item.active .br-dot {background:#667EEA}
+    
     .dash-main{flex:1;overflow-y:auto;padding:14px}
     .branch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     @media(max-width:768px){.branch-grid{grid-template-columns:repeat(2,1fr)}}
@@ -60,25 +70,16 @@
     .br-num{background:#F8FAFC;border-radius:8px;padding:6px;text-align:center}
     .br-num-val{font-size:16px;font-weight:700;line-height:1}
     .br-num-lbl{font-size:9px;color:#94A3B8;margin-top:1px}
-    .br-attend{background:#F0F4F8;border-radius:6px;padding:4px 8px;font-size:10px;color:#64748B;text-align:center;margin-bottom:4px}
-    .dept-list{border-top:1px dashed #E8EDF2;padding-top:8px;margin-top:4px;display:none}
-    .dept-list.show{display:block}
-    .dept-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:11px}
+    
     .tab-group{display:flex;background:#F1F5F9;border-radius:10px;padding:3px;gap:3px;margin-bottom:14px}
     .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:#64748B}
     .tab.active{background:#fff;color:#667EEA;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
     .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
-    .b-perm{background:#EEF2FF;color:#667EEA}
-    .b-temp{background:#FFFBEB;color:#D97706}
-    .b-find{background:#F3E8FF;color:#9333EA}
     .b-in{background:#ECFDF5;color:#029664}
     .b-out{background:#FEF2F2;color:#DC2626}
     .confirm-card{background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border:1.5px solid #C7D2FE;border-radius:14px;padding:14px;margin-bottom:12px}
     .info-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #E8EDF2;font-size:13px}
     .search-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;cursor:pointer;margin-bottom:6px}
-    .search-item:hover{border-color:#667EEA;background:#EEF2FF}.modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
-    .modal-wrap.open{display:flex !important}
-    .modal-box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:340px;border:1px solid #E8EDF2;box-shadow:0 20px 60px rgba(0,0,0,0.12);color:#1E293B;text-align:left}
     .log-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#fff;border:1px solid #E8EDF2;border-radius:10px;margin-bottom:6px}
     .staff-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid #E8EDF2;border-radius:10px;margin-bottom:6px}
     .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
@@ -86,7 +87,13 @@
     .home-nav-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;cursor:pointer;width:100%;text-align:left}
     .home-nav-btn:hover{border-color:#667EEA;box-shadow:0 4px 14px rgba(102,126,234,0.1)}
     .nav-icon-box{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
-    #loading-overlay { position:fixed; inset:0; background:rgba(255,255,255,0.8); z-index:9999; display:none; align-items:center; justify-content:center; font-weight:600; font-size:14px; color:#667EEA; }
+    
+    /* 🚨 MODAL FIXED STYLES - ป้องกันการกางแผ่กระจาย */
+    .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.5);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
+    .modal-wrap.open{display:flex !important}
+    .modal-box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:340px;border:1px solid #E8EDF2;box-shadow:0 20px 60px rgba(0,0,0,0.15);color:#1E293B;text-align:left}
+    
+    #loading-overlay { position:fixed; inset:0; background:rgba(255,255,255,0.8); z-index:10000; display:none; align-items:center; justify-content:center; font-weight:600; font-size:14px; color:#667EEA; }
   </style>
 </head>
 <body>
@@ -94,7 +101,10 @@
 <div id="loading-overlay">⏳ กำลังบันทึกข้อมูลเข้า Google Sheets ปลอดภัย...</div>
 
 <!-- MODALS -->
-<div class="modal-wrap" id="m-pw"><div class="modal-box">🔒 Admin Only<br><button class="btn btn-block" style="margin-top:10px" onclick="closeM('m-pw')">ปิด</button></div></div>
+<div class="modal-wrap" id="m-pw">
+  <div class="modal-box">🔒 Admin Only<br><button class="btn btn-block" style="margin-top:10px" onclick="closeM('m-pw')">ปิด</button></div>
+</div>
+
 <div class="modal-wrap" id="m-staff-pw">
   <div class="modal-box">
     🛡️ ปลดล็อกรายชื่อพนักงาน
@@ -102,6 +112,7 @@
     <div style="display:flex;gap:8px"><button class="btn btn-primary btn-block" onclick="checkSpw()">ยืนยัน</button><button class="btn btn-block" onclick="closeM('m-staff-pw')">ยกเลิก</button></div>
   </div>
 </div>
+
 <div class="modal-wrap" id="m-result">
   <div class="modal-box" style="text-align:center">
     <div id="r-icon" style="font-size:48px;margin-bottom:8px"></div>
@@ -112,9 +123,12 @@
     <button class="btn btn-primary btn-block" style="margin-top:14px" onclick="closeM('m-result')">ตกลง</button>
   </div>
 </div>
-<div class="modal-wrap" id="m-qr"><div class="modal-box" style="text-align:center">QR Code System Offline<br><button class="btn btn-block" style="margin-top:14px" onclick="closeM('m-qr')">ปิด</button></div></div>
 
-<!-- HOME -->
+<div class="modal-wrap" id="m-qr">
+  <div class="modal-box" style="text-align:center">QR Code System Offline<br><button class="btn btn-block" style="margin-top:14px" onclick="closeM('m-qr')">ปิด</button></div>
+</div>
+
+<!-- MAIN PAGE APPLICATION -->
 <div class="page active" id="p-home">
   <div style="background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%);padding:24px 16px 32px;color:#fff">
     <div style="font-size:20px;font-weight:700">See Staff Cloud</div>
@@ -229,7 +243,7 @@ var staff=[
   {fn:'สุดา',ln:'มีสุข',br:'ST01 ศรีนครินทร์',dp:'Support',ps:'Admin',et:'FindTemp',uid:'EMP003'},
   {fn:'ประไพ',ln:'สวยงาม',br:'ST03 อมตะ',dp:'Dry Food',ps:'Supervisor',et:'Permanent',uid:'EMP004'}
 ];
-var logs=[]; var actBr=[]; var staffUnlocked=false;
+var logs=[]; var selSt=null; var actBr=[]; var staffUnlocked=false; var PW='O2O_2026';
 
 function loadStorage() {
   var s = localStorage.getItem('seestaff_db_v11_fixed'); if (s) staff = JSON.parse(s);
@@ -247,7 +261,6 @@ function go(id){
 }
 function openM(id){ document.getElementById(id).classList.add('open'); }
 function closeM(id){ document.getElementById(id).classList.remove('open'); }
-function swTab(t){ if(t==='qr') alert('ฟังก์ชันสแกน QR จำลองถูกปิดในโหมดออนไลน์เพื่อความเสถียรครับ'); }
 
 function doSearch(){
   var q=document.getElementById('s-in').value.trim().toLowerCase();
@@ -367,7 +380,6 @@ function initReg(){
   BR.forEach(b=>{var o=document.createElement('option'); o.value=b; o.textContent=b; s.appendChild(o);});
   if(staffUnlocked) renderStaff();
 }
-function onDept(){} function onPos(){}
 function doReg(){
   var fn=document.getElementById('r-fn').value.trim(); var ln=document.getElementById('r-ln').value.trim(); var br=document.getElementById('r-br').value; var dp=document.getElementById('r-dp').value; var et=document.getElementById('r-et').value;
   if(!fn||!ln){alert('กรุณากรอกข้อมูลให้ครบ');return;}
@@ -379,7 +391,7 @@ function doReg(){
 }
 function renderStaff(){
   var el=document.getElementById('r-list'); if(!el) return;
-  var q=document.getElementById('sl-q').value.trim().toLowerCase();
+  var q=document.getElementById('sl-q') ? document.getElementById('sl-q').value.trim().toLowerCase() : '';
   var filtered=staff.filter(s=>(s.fn+' '+s.ln).toLowerCase().indexOf(q)>=0);
   document.getElementById('r-cnt').textContent=staff.length;
   el.innerHTML=filtered.map(s=>`<div class="staff-item"><strong>${s.fn} ${s.ln}</strong> (${s.uid})<br><small style="color:#64748B">${s.br} · ${s.dp}</small></div>`).join('');
