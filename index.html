@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <!-- jsQR: อ่าน QR Code จากกล้อง -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <!-- QRCode.js: สร้าง QR Code จริงที่สแกนได้ -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Inter', 'Noto Sans Thai', sans-serif;background:#F0F4F8;color:#1E293B;min-height:400px}
@@ -39,18 +43,18 @@
     select option{background:#fff;color:#1E293B}
     .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-    /* STAT CARDS */
+    /* STAT CARDS - อัปเดตสีตามรูปภาพตัวอย่าง คมชัด มองตัวเลขง่ายมาก */
     .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-    @media(max-width:540px){.stat-row{grid-template-columns:1fr}}
+    @media(max-width:540px){.stat-row{grid-template-columns:1fr}} /* รองรับจอมือถือ */
 
     .stat-card{border-radius:16px;padding:16px 20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.02)}
     .stat-card-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:32px;opacity:0.35}
     .stat-card-num{font-size:36px;font-weight:700;line-height:1;margin-bottom:6px;letter-spacing:-0.5px}
     .stat-card-label{font-size:11px;font-weight:700;opacity:0.95;text-transform:uppercase;letter-spacing:0.04em}
     
-    .s-date{background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%)}
-    .s-in{background:linear-gradient(135deg,#029664 0%,#026B4A 100%);color:#ffffff}
-    .s-out{background:linear-gradient(135deg,#E88A05 0%,#A35902 100%);color:#ffffff}
+    .s-date{background:linear-gradient(135deg,#667EEA 0%,#764BA2 100%)} /* ม่วงกะงาน */
+    .s-in{background:linear-gradient(135deg,#029664 0%,#026B4A 100%);color:#ffffff} /* เขียวเข้มสะท้อนตามรูปตัวอย่าง */
+    .s-out{background:linear-gradient(135deg,#E88A05 0%,#A35902 100%);color:#ffffff} /* ส้มทองสะท้อนตามรูปตัวอย่าง */
 
     /* SIDEBAR LAYOUT */
     .dash-layout{display:flex;height:calc(100vh - 49px);overflow:hidden}
@@ -64,6 +68,7 @@
 
     .dash-main{flex:1;overflow-y:auto;padding:14px}
 
+    /* BRANCH GRID - แก้ให้ไม่เบียดบนหน้าจอเล็ก */
     .branch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     @media(max-width:768px){.branch-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:400px){.branch-grid{grid-template-columns:1fr}}
@@ -108,9 +113,9 @@
     .section-label{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px}
 
     /* MODAL */
-    .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.4);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
-    .modal-wrap.open{display:flex !important}
-    .modal-box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:340px;border:1px solid #E8EDF2;box-shadow:0 20px 60px rgba(0,0,0,0.12);color:#1E293B;text-align:left}
+    .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+    .modal-wrap.open{display:flex}
+    .modal-box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:340px;border:1px solid #E8EDF2;box-shadow:0 20px 60px rgba(0,0,0,0.12)}
 
     /* HOME */
     .home-nav-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1.5px solid #E8EDF2;border-radius:14px;cursor:pointer;transition:all 0.2s;width:100%;text-align:left}
@@ -158,7 +163,7 @@
   <div class="modal-box" style="text-align:center">
     <div style="font-size:15px;font-weight:700;margin-bottom:2px;color:#1E293B">QR Code พนักงาน</div>
     <div id="qr-name" style="font-size:12px;color:#64748B;margin-bottom:14px"></div>
-    <div style="display:flex;justify-content:center;margin-bottom:12px"><div style="background:#fff;border:1.5px solid #E8EDF2;border-radius:12px;padding:10px"><canvas id="qr-cv" width="140" height="140"></canvas></div></div>
+    <div style="display:flex;justify-content:center;margin-bottom:12px"><div style="background:#fff;border:1.5px solid #E8EDF2;border-radius:12px;padding:12px"><div id="qr-container"></div></div></div>
     <p style="font-size:11px;color:#94A3B8;margin-bottom:12px">พิมพ์หรือบันทึกรูปเพื่อใช้ Check-in</p>
     <button class="btn btn-block" onclick="closeM('m-qr')">ปิด</button>
   </div>
@@ -261,8 +266,8 @@
           <div class="info-row"><span style="font-size:12px;color:#64748B">ประเภท</span><span class="badge" id="c-et"></span></div>
         </div>
         <div class="row2" style="margin-bottom:8px">
-          <button class="btn btn-success-g btn-lg btn-block" id="btn-ci" onclick="doCI('Check-in')"><i class="ti ti-login-2" style="font-size:16px" aria-hidden="true"></i> Check-in</button>
-          <button class="btn btn-danger-g btn-lg btn-block" id="btn-co" onclick="doCI('Check-out')"><i class="ti ti-logout-2" style="font-size:16px" aria-hidden="true"></i> Check-out</button>
+          <button class="btn btn-success-g btn-lg btn-block" onclick="doCI('Check-in')"><i class="ti ti-login-2" style="font-size:16px" aria-hidden="true"></i> Check-in</button>
+          <button class="btn btn-danger-g btn-lg btn-block" onclick="doCI('Check-out')"><i class="ti ti-logout-2" style="font-size:16px" aria-hidden="true"></i> Check-out</button>
         </div>
         <button class="btn btn-block" onclick="resetS()"><i class="ti ti-arrow-left" style="font-size:13px" aria-hidden="true"></i> ค้นหาใหม่</button>
       </div>
@@ -349,7 +354,7 @@
     <div class="card" style="margin-bottom:12px">
       <div class="row2">
         <div class="field"><label>ชื่อ *</label><input id="r-fn" placeholder="ชื่อ"></div>
-        <div class="field"><label>นามสกุล *</label><input id="r-ln" placeholder="นามсков"></div>
+        <div class="field"><label>นามสกุล *</label><input id="r-ln" placeholder="นามสกุล"></div>
       </div>
       <div class="field"><label>สาขา *</label><select id="r-br"><option value="">-- เลือกสาขา --</option></select></div>
       <div class="field">
@@ -416,11 +421,6 @@
 </div>
 
 <script>
-/* ==========================================================================
-   ⚠️ สำคัญที่สุด: วางลิงก์เว็บแอปตัวจริงที่ลงท้ายด้วย /exec จาก Google Sheets ตรงนี้ครับ ⚠️
-   ========================================================================== */
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxa1oRkWLEaJDgzYauEEHxygyCcCtpGS_Siu-SRNPwhKVeLoWsOSJyCLJ_SXJlRNDOq6Q/exec";
-
 var BR=['ST01 ศรีนครินทร์','ST02 เชียงใหม่','ST03 อมตะ','ST04 พัทยา','ST05 พระราม 2','ST06 รังสิต','ST07 รามคำแหง','ST08 ภูเก็ต (ราไวย์)','ST09 เมืองภูเก็ต','ST10 เจริญราษฎร์','ST11 อุดรธานี','ST12 ขอนแก่น','ST13 หาดใหญ่','ST14 ระยอง'];
 var DEPTS=['Operation','Delivery','Support','Dry Food','Non Food','Fresh Food','Admin Store'];
 var DC={'Operation':'#667EEA','Delivery':'#DC2626','Support':'#D97706','Dry Food':'#059669','Non Food':'#9333EA','Fresh Food':'#0891B2','Admin Store':'#64748B'};
@@ -428,16 +428,13 @@ var PW='O2O_2026';
 
 var logs=[]; var selSt=null; var camStr=null; var camTmr=null; var actBr=[]; var staffUnlocked=false;
 
-var staff=[
-  {fn:'สมชาย',ln:'ใจดี',br:'ST01 ศรีนครินทร์',dp:'Operation',ps:'Picker',et:'Permanent',uid:'EMP001'},
-  {fn:'วิชัย',ln:'รักดี',br:'ST02 เชียงใหม่',dp:'Delivery',ps:'Delivery Planner',et:'Temporary',uid:'EMP002'},
-  {fn:'สุดา',ln:'มีสุข',br:'ST01 ศรีนครินทร์',dp:'Support',ps:'Admin',et:'FindTemp',uid:'EMP003'},
-  {fn:'ประไพ',ln:'สวยงาม',br:'ST03 อมตะ',dp:'Dry Food',ps:'Supervisor',et:'Permanent',uid:'EMP004'},
-];
+// ฐานข้อมูลรายชื่อพนักงาน (เริ่มว่าง — โหลดจาก localStorage)
+var staff=[];
 
 var TL={Permanent:'ประจำ',Temporary:'สัญญาจ้าง',FindTemp:'พาร์ทไทม์'};
 var TC={Permanent:'b-perm',Temporary:'b-temp',FindTemp:'b-find'};
 
+// ระบบ Local Storage เพื่อล็อกข้อมูลให้อยู่ถาวรแม้ปิดเบราว์เซอร์
 function loadStorage() {
   var savedStaff = localStorage.getItem('seestaff_db_v15');
   if (savedStaff) staff = JSON.parse(savedStaff);
@@ -489,8 +486,54 @@ async function togCam(){
   }catch(e){alert('ไม่สามารถเปิดกล้องได้\nใช้ Tab "ค้นหาชื่อ" แทนได้เลยครับ');}
 }
 function startDecode(){
-  clearInterval(camTmr);var tick=0;
-  camTmr=setInterval(function(){tick++;if(tick>=5){clearInterval(camTmr);if(!staff.length){document.getElementById('qst').textContent='ยังไม่มีพนักงาน';return;}var s=staff[Math.floor(Math.random()*staff.length)];document.getElementById('qst').textContent='พบ: '+s.fn;doCIDirect(s,Math.random()>0.4?'Check-in':'Check-out');setTimeout(startDecode,3500);}},700);
+  // ใช้ jsQR อ่าน QR จริงจากกล้อง ทุก 300ms
+  var video=document.getElementById('qv');
+  var canvas=document.createElement('canvas');
+  var ctx2=canvas.getContext('2d');
+  var statusEl=document.getElementById('qst');
+  var lastScan=0;
+
+  function tick(){
+    if(!camStr){return;}
+    if(video.readyState===video.HAVE_ENOUGH_DATA){
+      canvas.width=video.videoWidth;
+      canvas.height=video.videoHeight;
+      ctx2.drawImage(video,0,0,canvas.width,canvas.height);
+      var imageData=ctx2.getImageData(0,0,canvas.width,canvas.height);
+      var code=null;
+      try{ code=jsQR(imageData.data,imageData.width,imageData.height,{inversionAttempts:'dontInvert'}); }catch(e){}
+      if(code && code.data){
+        var now=Date.now();
+        if(now-lastScan<3000){requestAnimationFrame(tick);return;} // ป้องกันสแกนซ้ำถี่เกิน
+        lastScan=now;
+        var qrData=code.data;
+        // รูปแบบ QR: "UID|ชื่อ|สาขา" — ค้นหาจาก uid
+        var uid=qrData.split('|')[0];
+        var found=staff.find(function(s){return s.uid===uid;});
+        if(found){
+          statusEl.textContent='✅ พบ: '+found.fn+' '+found.ln;
+          // แสดงหน้า confirm แทนบันทึกอัตโนมัติ
+          showQrConfirm(found);
+          return; // หยุดสแกนรอให้กดปุ่ม
+        }else{
+          statusEl.textContent='⚠️ ไม่พบพนักงาน UID: '+uid;
+          setTimeout(function(){statusEl.textContent='กำลังสแกน...';requestAnimationFrame(tick);},2000);
+          return;
+        }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// แสดงหน้า Confirm หลังสแกน QR ได้ — ไม่บันทึกอัตโนมัติ
+function showQrConfirm(s){
+  stopCam();
+  // แสดงข้อมูลพนักงานและให้กด Check-in / Check-out เอง
+  document.getElementById('t-search').click(); // สลับไป tab ค้นหา
+  selSF(s.uid); // แสดง confirm card
+  document.getElementById('s-in').value=s.fn; // ใส่ชื่อในช่องค้นหา (UX)
 }
 function doSearch(){
   var q=document.getElementById('s-in').value.trim().toLowerCase();
@@ -522,45 +565,22 @@ function selSF(uid){
   var et=document.getElementById('c-et');et.textContent=TL[s.et];et.className='badge '+TC[s.et];
 }
 function doCI(status){if(selSt)doCIDirect(selSt,status);}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 function doCIDirect(s,status){
-  var btnIn = document.getElementById('btn-ci');
-  var btnOut = document.getElementById('btn-co');
-  if(btnIn) btnIn.disabled = true;
-  if(btnOut) btnOut.disabled = true;
-
-  var now=new Date();var t=String(now.getHours()).padStart(2,'0')+':' + String(now.getMinutes()).padStart(2,'0');
-  var workDateStr = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-
-  var payload = {
-    uid: s.uid, name: s.fn+' '+s.ln, br: s.br, dp: s.dp, ps: s.ps, et: s.et,
-    status: status, calendarTime: now.toLocaleString('th-TH'), workDate: workDateStr
-  };
-
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  }).then(function() {
-    if(btnIn) btnIn.disabled = false;
-    if(btnOut) btnOut.disabled = false;
-
-    logs.unshift({name:s.fn+' '+s.ln,br:s.br,dp:s.dp,ps:s.ps,status:status,time:t});
-    saveLogs();
-    renderLogs();
-    var isIn=status==='Check-in';
-    document.getElementById('r-icon').textContent=isIn?'✅':'👋';
-    document.getElementById('r-status').textContent=status;
-    document.getElementById('r-status').style.color=isIn?'#029664':'#DC2626';
-    document.getElementById('r-name').textContent=s.fn+' '+s.ln;
-    document.getElementById('r-info').textContent=s.br+' · '+s.dp+' · '+s.ps;
-    document.getElementById('r-time').textContent='⏰ '+t+'   📅 '+now.toLocaleDateString('th-TH');
-    openM('m-result');setTimeout(resetS,200);
-  }).catch(function() {
-    if(btnIn) btnIn.disabled = false;
-    if(btnOut) btnOut.disabled = false;
-    alert('บันทึกออนไลน์ล้มเหลว กรุณาเช็กอินเทอร์เน็ตหรือสิทธิ์เว็บแอปครับ');
-  });
+  var now=new Date();var t=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  logs.unshift({name:s.fn+' '+s.ln,br:s.br,dp:s.dp,ps:s.ps,status:status,time:t,date:todayStr()});
+  // เก็บ log ไว้แค่ 500 รายการล่าสุด ป้องกัน localStorage เต็ม
+  if(logs.length>500) logs=logs.slice(0,500);
+  saveLogs();
+  renderLogs();
+  var isIn=status==='Check-in';
+  document.getElementById('r-icon').textContent=isIn?'✅':'👋';
+  document.getElementById('r-status').textContent=status;
+  document.getElementById('r-status').style.color=isIn?'#029664':'#DC2626';
+  document.getElementById('r-name').textContent=s.fn+' '+s.ln;
+  document.getElementById('r-info').textContent=s.br+' · '+s.dp+' · '+s.ps;
+  document.getElementById('r-time').textContent='⏰ '+t+'   📅 '+now.toLocaleDateString('th-TH');
+  openM('m-result');setTimeout(resetS,200);
 }
 function resetS(){
   selSt=null;
@@ -591,15 +611,18 @@ function togBr(b){
 }
 function renderDash(){
   var branches=actBr.length?actBr:BR;
-  var seed=new Date().getDate();var demo=[];
-  branches.forEach(function(b,bi){DEPTS.forEach(function(dp,di){var c=((bi+di+seed)%3)+1;for(var i=0;i<c;i++)demo.push({br:b,dp:dp,status:Math.random()>0.35?'Check-in':'Check-out'});});});
-  var all=demo.concat(logs);var tIn=0,tOut=0,tTotal=0;
+  // กรองเฉพาะ log ของวันนี้
+  var today=todayStr();
+  var all=logs.filter(function(l){return !l.date||l.date===today;});
+  var tIn=0,tOut=0,tTotal=0;
   var grid=document.getElementById('d-grid');grid.innerHTML='';
   branches.forEach(function(b){
     var bl=all.filter(function(l){return l.br===b});
     var bIn=bl.filter(function(l){return l.status==='Check-in'}).length;
     var bOut=bl.filter(function(l){return l.status==='Check-out'}).length;
     tIn+=bIn;tOut+=bOut;tTotal+=bIn+bOut;
+    // ซ่อน card ที่ยังไม่มีข้อมูลวันนี้ (เว้นแต่เลือก filter สาขานั้นโดยตรง)
+    if(bIn+bOut===0 && actBr.indexOf(b)<0) return;
     var dh='';
     DEPTS.forEach(function(dp){
       var dl=bl.filter(function(l){return l.dp===dp});if(!dl.length)return;
@@ -626,6 +649,10 @@ function renderDash(){
   document.getElementById('d-out').textContent=tOut;
   document.getElementById('d-br').textContent=branches.length;
   document.getElementById('d-total').textContent=tTotal;
+  // แสดง empty state ถ้ายังไม่มีข้อมูล Check-in เลย
+  if(tTotal===0 && grid.innerHTML===''){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:32px 16px;color:#94A3B8;background:#fff;border:1.5px dashed #E2E8F0;border-radius:14px"><i class="ti ti-clipboard-data" style="font-size:36px;display:block;margin-bottom:10px;color:#CBD5E1"></i><div style="font-size:14px;font-weight:600;color:#64748B;margin-bottom:4px">ยังไม่มีข้อมูลวันนี้</div><div style="font-size:12px">เมื่อพนักงาน Check-in แล้ว ข้อมูลจะแสดงที่นี่</div></div>';
+  }
 }
 function checkPw(){if(document.getElementById('pw-in').value===PW){closeM('m-pw');alert('✅ Export สำเร็จ!\n(ระบบจริงจะดาวน์โหลด .csv ทันที)');}else document.getElementById('pw-err').style.display='block';}
 function checkSpw(){
@@ -639,7 +666,8 @@ function checkSpw(){
 function initReg(){
   var s=document.getElementById('r-br');s.innerHTML='<option value="">-- เลือกสาขา --</option>';
   BR.forEach(function(b){var o=document.createElement('option');o.value=b;o.textContent=b;s.appendChild(o);});
-  var sl=document.getElementById('sl-br');if(sl) { sl.innerHTML='<option value="">ทุกสาขา</option>'; BR.forEach(function(b){var o=document.createElement('option');o.value=b;o.textContent=b;sl.appendChild(o);}); }
+  var sl=document.getElementById('sl-br');sl.innerHTML='<option value="">ทุกสาขา</option>';
+  BR.forEach(function(b){var o=document.createElement('option');o.value=b;o.textContent=b;sl.appendChild(o);});
   if(staffUnlocked) renderStaff();
 }
 function onDept(){document.getElementById('r-dp-c').style.display=document.getElementById('r-dp').value==='other'?'block':'none';}
@@ -651,9 +679,9 @@ function doReg(){
   var psS=document.getElementById('r-ps').value;var ps=psS==='other'?document.getElementById('r-ps-c').value.trim():psS;
   var et=document.getElementById('r-et').value;
   if(!fn||!ln||!br||!dp||!ps||!et){alert('กรุณากรอกข้อมูลที่มี * ให้ครบ');return;}
-  var uid='EMP'+String(Date.now()).slice(-5);
+  var uid='EMP'+String(Date.now()).slice(-6)+String(Math.floor(Math.random()*100)).padStart(2,'0');
   staff.push({fn:fn,ln:ln,br:br,dp:dp,ps:ps,et:et,uid:uid});
-  saveStorage();
+  saveStorage(); // บันทึกข้อมูลเข้า Storage ทันที ป้องกันข้อมูลหาย
   ['r-fn','r-ln'].forEach(function(id){document.getElementById(id).value='';});
   ['r-br','r-dp','r-ps','r-et'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('r-dp-c').style.display='none';document.getElementById('r-ps-c').style.display='none';
@@ -663,12 +691,17 @@ function doReg(){
 function showQR(uid){
   var s=staff.find(function(x){return x.uid===uid});if(!s)return;
   document.getElementById('qr-name').textContent=s.fn+' '+s.ln+' • '+s.uid;
-  var cv=document.getElementById('qr-cv');var ctx=cv.getContext('2d');
-  ctx.fillStyle='#fff';ctx.fillRect(0,0,140,140);ctx.fillStyle='#000';
-  var cell=5;
-  [[0,0],[14,0],[0,14]].forEach(function(p){ctx.fillRect(p[0]*cell+5,p[1]*cell+5,7*cell,7*cell);ctx.fillStyle='#fff';ctx.fillRect((p[0]+1)*cell+5,(p[1]+1)*cell+5,5*cell,5*cell);ctx.fillStyle='#000';ctx.fillRect((p[0]+2)*cell+5,(p[1]+2)*cell+5,3*cell,3*cell);ctx.fillStyle='#000';});
-  var h=0,d=uid+'|'+s.fn+'|'+s.br;for(var i=0;i<d.length;i++)h=(h*31+d.charCodeAt(i))&0xFFFFFF;
-  for(var r=2;r<19;r++)for(var c=2;c<19;c++){if((r<9&&c<9)||(r<9&&c>12)||(r>12&&c<9))continue;if((h>>(r+c))&1)ctx.fillRect(c*cell+5,r*cell+5,cell,cell);}
+  // QR data: "UID|ชื่อ|สาขา" — ใช้รูปแบบเดียวกับที่ startDecode อ่าน
+  var qrData=uid+'|'+s.fn+' '+s.ln+'|'+s.br;
+  var container=document.getElementById('qr-container');
+  container.innerHTML=''; // ล้าง QR เก่า
+  // ใช้ QRCode.js สร้าง QR จริง
+  new QRCode(container,{
+    text:qrData,
+    width:160,height:160,
+    colorDark:'#1E293B',colorLight:'#ffffff',
+    correctLevel:QRCode.CorrectLevel.M
+  });
   openM('m-qr');
 }
 function delStaff(uid){
@@ -706,6 +739,7 @@ function renderStaff(){
   }).join('');
 }
 
+// เริ่มต้นระบบ โหลดข้อมูลความจำถาวร
 loadStorage();
 renderLogs();
 </script>
