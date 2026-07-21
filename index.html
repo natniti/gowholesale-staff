@@ -578,9 +578,36 @@ function selSF(uid){
   var et=document.getElementById('c-et');et.textContent=TL[s.et];et.className='badge '+TC[s.et];
 }
 function doCI(status) { if (selSt) doCIDirect(selSt, status); }
+
 function todayStr(){
   var d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+// 🎯 ฟังก์ชันอัจฉริยะช่วยแปลงวันที่จากทุกฟอร์แมตให้ออกมาเป็น YYYY-MM-DD ตรงกันเป๊ะ 100%
+function parseToYMD(v) {
+  if (!v) return '';
+  var str = String(v).trim();
+  
+  // 1. ดักจับรูปแบบ พ.ศ. เช่น 21/7/2569 หรือ 21/07/2569
+  var mThai = str.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (mThai) {
+    var d = parseInt(mThai[1], 10);
+    var m = parseInt(mThai[2], 10);
+    var y = parseInt(mThai[3], 10);
+    if (y > 2400) y -= 543; // แปลง พ.ศ. เป็น ค.ศ.
+    return y + '-' + String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  }
+  
+  // 2. ดักจับรูปแบบ ค.ศ. ISO หรือ YYYY-MM-DD
+  var dt = new Date(str);
+  if (!isNaN(dt.getTime())) {
+    var y = dt.getFullYear();
+    var m = dt.getMonth() + 1;
+    var day = dt.getDate();
+    return y + '-' + String(m).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+  }
+  return '';
 }
 
 function doCIDirect(s,status){
@@ -647,7 +674,7 @@ function togBr(b){
   initSidebar();renderDash();
 }
 
-// 🚀 REAL-TIME DASHBOARD SMART AUTO-DETECT FROM GOOGLE SHEETS
+// 🚀 REAL-TIME DASHBOARD DATA FETCH & SMART CALCULATION
 function renderDash(){
   var grid=document.getElementById('d-grid');
   grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:#667EEA;font-size:13px">⏳ กำลังดึงข้อมูลล่าสุดจาก Google Sheets...</div>';
@@ -656,30 +683,26 @@ function renderDash(){
     .then(res => res.json())
     .then(data => {
       var cloudLogs = [];
-      var now = new Date();
-      var tDay = now.getDate();
-      var tMonth = now.getMonth() + 1;
-      var tYearAD = now.getFullYear(); // 2026
-      var tYearBE = tYearAD + 543;     // 2569
-
-      // ฟังก์ชันอัจฉริยะตรวจจับวันที่ทุกประเภท (พ.ศ., ค.ศ., ISO)
-      function isTodayRow(row) {
-        var rowText = JSON.stringify(row);
-        if (rowText.indexOf(tYearAD + '-' + String(tMonth).padStart(2,'0') + '-' + String(tDay).padStart(2,'0')) >= 0) return true;
-        if (rowText.indexOf(tDay + '/' + tMonth + '/' + tYearBE) >= 0 || rowText.indexOf(String(tDay).padStart(2,'0') + '/' + String(tMonth).padStart(2,'0') + '/' + tYearBE) >= 0) return true;
-        if (rowText.indexOf(tDay + '/' + tMonth + '/' + tYearAD) >= 0 || rowText.indexOf(String(tDay).padStart(2,'0') + '/' + String(tMonth).padStart(2,'0') + '/' + tYearAD) >= 0) return true;
-        return false;
-      }
+      var targetYMD = todayStr(); // "2026-07-21"
 
       if (data && data.length > 1) {
         for (var i = 1; i < data.length; i++) {
           var row = data[i];
-          if (isTodayRow(row)) {
-            var rawStatus = String(row[6] || '').trim();
-            var statusVal = rawStatus.toLowerCase().indexOf('in') >= 0 ? 'Check-in' : 'Check-out';
+          
+          // ดึงวันที่จาก Work Date (คอลัมน์ I/index 8) หรือ Calendar Date (คอลัมน์ H/index 7)
+          var ymd8 = parseToYMD(row[8]);
+          var ymd7 = parseToYMD(row[7]);
+          var rowYMD = ymd8 || ymd7;
+
+          // เช็กว่าเป็นข้อมูลของวันนี้หรือไม่
+          if (rowYMD === targetYMD) {
+            var stRaw = String(row[6] || '').trim().toLowerCase();
+            // เช็กสถานะ Check-in / Check-out แบบรัดกุม
+            var statusVal = (stRaw.indexOf('out') >= 0) ? 'Check-out' : 'Check-in';
+            
             var rawTime = String(row[7] || '');
             var timeStr = rawTime.indexOf(' ') >= 0 ? rawTime.split(' ')[1] : rawTime;
-            
+
             cloudLogs.push({
               uid: String(row[0] || '').trim(),
               name: String(row[1] || '').trim(),
