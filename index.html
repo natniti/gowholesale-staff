@@ -126,7 +126,7 @@
 </head>
 <body>
 
-<div id="loading-overlay">⏳ กำลังบันทึกข้อมูลเข้า Google Sheets ปลอดภัย...</div>
+<div id="loading-overlay">⏳ กำลังประมวลผลระบบคลาวด์...</div>
 
 <!-- MODALS -->
 <div class="modal-wrap" id="m-pw">
@@ -313,7 +313,6 @@
       <div id="br-sidebar"></div>
     </div>
     <div class="dash-main">
-      <!-- STAT CARDS ปรับสีตรงตามไฟล์รูปตัวอย่างที่ส่งมาเป๊ะๆ มองตัวเลขเด่นชัดมาก -->
       <div class="stat-row">
         <div class="stat-card s-date">
           <div class="stat-card-icon"><i class="ti ti-calendar" aria-hidden="true"></i></div>
@@ -331,7 +330,6 @@
           <div class="stat-card-label">CHECK-OUT รวม</div>
         </div>
       </div>
-      <!-- SUMMARY ROW -->
       <div style="display:flex;gap:8px;margin-bottom:14px">
         <div style="flex:1;background:#fff;border:1px solid #E8EDF2;border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
           <div><div style="font-size:11px;color:#94A3B8;font-weight:600">สาขาที่เลือก</div><div style="font-size:20px;font-weight:700;color:#667EEA" id="d-br">0</div></div>
@@ -364,9 +362,16 @@
         <label>แผนก *</label>
         <select id="r-dp" onchange="onDept()">
           <option value="">-- เลือกแผนก --</option>
-          <option>Operation</option><option>Delivery</option><option>Support</option>
-          <option>Dry Food</option><option>Non Food</option><option>Fresh Food</option>
-          <option>Admin Store</option><option value="other">กรอกเอง...</option>
+          <option>Fulfillment Manager</option>
+          <option>Section Manager</option>
+          <option>Operation</option>
+          <option>Delivery</option>
+          <option>Support</option>
+          <option>Dry Food</option>
+          <option>Non Food</option>
+          <option>Fresh Food</option>
+          <option>Admin Store</option>
+          <option value="other">กรอกเอง...</option>
         </select>
         <input id="r-dp-c" placeholder="ระบุชื่อแผนก..." style="display:none;margin-top:6px">
       </div>
@@ -374,8 +379,13 @@
         <label>ตำแหน่ง *</label>
         <select id="r-ps" onchange="onPos()">
           <option value="">-- เลือกตำแหน่ง --</option>
-          <option>Supervisor</option><option>Admin</option><option>Picker</option>
-          <option>Loader</option><option>Delivery Planner</option>
+          <option>Fulfillment Manager</option>
+          <option>Section Manager</option>
+          <option>Supervisor</option>
+          <option>Admin</option>
+          <option>Picker</option>
+          <option>Loader</option>
+          <option>Delivery Planner</option>
           <option value="other">อื่นๆ กรอกเอง...</option>
         </select>
         <input id="r-ps-c" placeholder="ระบุตำแหน่ง..." style="display:none;margin-top:6px">
@@ -425,13 +435,13 @@
 
 <script>
 /* ==========================================================================
-   ⚠️ สำคัญที่สุด: วางลิงก์เว็บแอปตัวจริงที่ลงท้ายด้วย /exec จาก Google Sheets ตรงนี้ครับ ⚠️
+   ⚠️ วางลิงก์เว็บแอปตัวใหม่จาก Apps Script ที่ลงท้ายด้วย /exec ตรงนี้ ⚠️
    ========================================================================== */
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxa1oRkWLEaJDgzYauEEHxygyCcCtpGS_Siu-SRNPwhKVeLoWsOSJyCLJ_SXJlRNDOq6Q/exec";
 
 var BR=['ST01 ศรีนครินทร์','ST02 เชียงใหม่','ST03 อมตะ','ST04 พัทยา','ST05 พระราม 2','ST06 รังสิต','ST07 รามคำแหง','ST08 ภูเก็ต (ราไวย์)','ST09 เมืองภูเก็ต','ST10 เจริญราษฎร์','ST11 อุดรธานี','ST12 ขอนแก่น','ST13 หาดใหญ่','ST14 ระยอง'];
-var DEPTS=['Operation','Delivery','Support','Dry Food','Non Food','Fresh Food','Admin Store'];
-var DC={'Operation':'#667EEA','Delivery':'#DC2626','Support':'#D97706','Dry Food':'#059669','Non Food':'#9333EA','Fresh Food':'#0891B2','Admin Store':'#64748B'};
+var DEPTS=['Fulfillment Manager','Section Manager','Operation','Delivery','Support','Dry Food','Non Food','Fresh Food','Admin Store'];
+var DC={'Fulfillment Manager':'#7C3AED','Section Manager':'#2563EB','Operation':'#667EEA','Delivery':'#DC2626','Support':'#D97706','Dry Food':'#059669','Non Food':'#9333EA','Fresh Food':'#0891B2','Admin Store':'#64748B'};
 var PW='O2O_2026';
 
 var logs=[]; var selSt=null; var camStr=null; var camTmr=null; var actBr=[]; var staffUnlocked=false;
@@ -636,50 +646,99 @@ function togBr(b){
   if(b==='all'){actBr=[];}else{var i=actBr.indexOf(b);if(i>=0)actBr.splice(i,1);else actBr.push(b);}
   initSidebar();renderDash();
 }
+
 function renderDash(){
-  var branches=actBr.length?actBr:BR;
-  var today=todayStr();
-  var all=logs.filter(function(l){return !l.date||l.date===today;});
-  var tIn=0,tOut=0,tTotal=0;
-  var grid=document.getElementById('d-grid');grid.innerHTML='';
-  branches.forEach(function(b){
-    var bl=all.filter(function(l){return l.br===b});
-    var bIn=bl.filter(function(l){return l.status==='Check-in'}).length;
-    var bOut=bl.filter(function(l){return l.status==='Check-out'}).length;
-    tIn+=bIn;tOut+=bOut;tTotal+=bIn+bOut;
-    if(bIn+bOut===0 && actBr.indexOf(b)<0) return;
-    var dh='';
-    DEPTS.forEach(function(dp){
-      var dl=bl.filter(function(l){return l.dp===dp});if(!dl.length)return;
-      var dI=dl.filter(function(l){return l.status==='Check-in'}).length;
-      var dO=dl.filter(function(l){return l.status==='Check-out'}).length;
-      dh+='<div class="dept-row"><span style="color:'+DC[dp]+';font-weight:600;font-size:11px">'+dp+'</span><span style="font-size:11px"><span style="color:#029664;font-weight:600">'+dI+' in</span><span style="color:#CBD5E1;margin:0 3px">/</span><span style="color:#E88A05;font-weight:600">'+dO+' out</span></span></div>';
+  var grid=document.getElementById('d-grid');
+  grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:#667EEA;font-size:13px">⏳ กำลังดึงข้อมูลล่าสุดจาก Google Sheets...</div>';
+
+  fetch(SCRIPT_URL)
+    .then(res => res.json())
+    .then(sheetData => {
+      var cloudLogs = [];
+      var now = new Date();
+      var todayFormatted = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+
+      if (sheetData && sheetData.length > 1) {
+        for (var i = 1; i < sheetData.length; i++) {
+          var row = sheetData[i];
+          var wDate = row[8] ? String(row[8]).trim() : '';
+          var timeStr = row[7] ? String(row[7]).split(' ')[1] || String(row[7]) : '';
+          
+          cloudLogs.push({
+            uid: row[0],
+            name: row[1],
+            br: row[2],
+            dp: row[3],
+            ps: row[4],
+            et: row[5],
+            status: row[6],
+            time: timeStr,
+            date: wDate
+          });
+        }
+      }
+
+      var allLogs = cloudLogs.concat(logs);
+      var todayLogs = allLogs.filter(function(l){ return l.date === todayFormatted || !l.date; });
+
+      var branches = actBr.length ? actBr : BR;
+      var tIn = 0, tOut = 0, tTotal = 0;
+      grid.innerHTML = '';
+
+      branches.forEach(function(b){
+        var bl = todayLogs.filter(function(l){ return l.br === b; });
+        var bIn = bl.filter(function(l){ return l.status === 'Check-in'; }).length;
+        var bOut = bl.filter(function(l){ return l.status === 'Check-out'; }).length;
+        tIn += bIn; tOut += bOut; tTotal += bIn + bOut;
+
+        if (bIn + bOut === 0 && actBr.indexOf(b) < 0) return;
+
+        var dh = '';
+        DEPTS.forEach(function(dp){
+          var dl = bl.filter(function(l){ return l.dp === dp; });
+          if (!dl.length) return;
+          var dI = dl.filter(function(l){ return l.status === 'Check-in'; }).length;
+          var dO = dl.filter(function(l){ return l.status === 'Check-out'; }).length;
+          var colorCode = DC[dp] || '#667EEA';
+          dh += '<div class="dept-row"><span style="color:'+colorCode+';font-weight:600;font-size:11px">'+dp+'</span><span style="font-size:11px"><span style="color:#029664;font-weight:600">'+dI+' in</span><span style="color:#CBD5E1;margin:0 3px">/</span><span style="color:#E88A05;font-weight:600">'+dO+' out</span></span></div>';
+        });
+
+        var brName = b.replace(/^ST\d+\s/,'');
+        var brCode = b.split(' ')[0];
+        var card = document.createElement('div');
+        card.className = 'br-card';
+        card.onclick = function(){
+          var dl = card.querySelector('.dept-list');
+          dl.classList.toggle('show');
+          card.classList.toggle('open');
+        };
+        card.innerHTML =
+          '<div class="br-name">'+brName+'</div>'+
+          '<div class="br-code">'+brCode+'</div>'+
+          '<div class="br-nums">'+
+          '<div class="br-num"><div class="br-num-val" style="color:#029664">'+bIn+'</div><div class="br-num-lbl">Check-in</div></div>'+
+          '<div class="br-num"><div class="br-num-val" style="color:#E88A05">'+bOut+'</div><div class="br-num-lbl">Check-out</div></div>'+
+          '</div>'+
+          '<div class="br-attend" style="font-size:10px;color:#64748B">รวม '+(bIn+bOut)+' คน • อัตราเข้างาน '+Math.round((bIn/(bIn+bOut||1))*100)+'%</div>'+
+          '<div style="font-size:10px;color:#94A3B8;text-align:center;margin-bottom:2px"><i class="ti ti-chevron-down" style="font-size:11px"></i> กดดูรายแผนก</div>'+
+          '<div class="dept-list">'+dh+'</div>';
+        grid.appendChild(card);
+      });
+
+      document.getElementById('d-in').textContent = tIn;
+      document.getElementById('d-out').textContent = tOut;
+      document.getElementById('d-br').textContent = branches.length;
+      document.getElementById('d-total').textContent = tTotal;
+
+      if (tTotal === 0 && grid.innerHTML === '') {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px 16px;color:#94A3B8;background:#fff;border:1.5px dashed #E2E8F0;border-radius:14px"><i class="ti ti-clipboard-data" style="font-size:36px;display:block;margin-bottom:10px;color:#CBD5E1"></i><div style="font-size:14px;font-weight:600;color:#64748B;margin-bottom:4px">ยังไม่มีข้อมูลวันนี้</div><div style="font-size:12px">เมื่อพนักงาน Check-in แล้ว ข้อมูลจะแสดงที่นี่</div></div>';
+      }
+    })
+    .catch(err => {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#DC2626;font-size:12px">❌ ไม่สามารถดึงข้อมูลออนไลน์ได้ กรุณาเช็กสิทธิ์ SCRIPT_URL ใน Google Sheets</div>';
     });
-    var brName=b.replace(/^ST\d+\s/,'');var brCode=b.split(' ')[0];
-    var card=document.createElement('div');card.className='br-card';
-    card.onclick=function(){var dl=card.querySelector('.dept-list');dl.classList.toggle('show');card.classList.toggle('open');};
-    card.innerHTML=
-      '<div class="br-name">'+brName+'</div>'+
-      '<div class="br-code">'+brCode+'</div>'+
-      '<div class="br-nums">'+
-      '<div class="br-num"><div class="br-num-val" style="color:#029664">'+bIn+'</div><div class="br-num-lbl">Check-in</div></div>'+
-      '<div class="br-num"><div class="br-num-val" style="color:#E88A05">'+bOut+'</div><div class="br-num-lbl">Check-out</div></div>'+
-      '</div>'+
-      '<div class="br-attend" style="font-size:10px;color:#64748B">รวม '+(bIn+bOut)+' คน • อัตราเข้างาน '+Math.round((bIn/(bIn+bOut||1))*100)+'%</div>'+
-      '<div style="font-size:10px;color:#94A3B8;text-align:center;margin-bottom:2px"><i class="ti ti-chevron-down" style="font-size:11px"></i> กดดูรายแผนก</div>'+
-      '<div class="dept-list">'+dh+'</div>';
-    grid.appendChild(card);
-  });
-  document.getElementById('d-in').textContent=tIn;
-  document.getElementById('d-out').textContent=tOut;
-  document.getElementById('d-br').textContent=branches.length;
-  document.getElementById('d-total').textContent=tTotal;
-  if(tTotal===0 && grid.innerHTML===''){
-    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:32px 16px;color:#94A3B8;background:#fff;border:1.5px dashed #E2E8F0;border-radius:14px"><i class="ti ti-clipboard-data" style="font-size:36px;display:block;margin-bottom:10px;color:#CBD5E1"></i><div style="font-size:14px;font-weight:600;color:#64748B;margin-bottom:4px">ยังไม่มีข้อมูลวันนี้</div><div style="font-size:12px">เมื่อพนักงาน Check-in แล้ว ข้อมูลจะแสดงที่นี่</div></div>';
-  }
 }
 
-// 🛠️ ฟังก์ชัน Export ซ่อมแซมให้ดึงไฟล์ CSV ออกมาใช้งานได้จริง
 function checkPw(){
   if(document.getElementById('pw-in').value===PW){
     closeM('m-pw');
@@ -688,11 +747,9 @@ function checkPw(){
       return;
     }
     
-    // สร้างหัวตาราง CSV
-    var csvContent = "\uFEFF"; // ป้องกันภาษาไทยเพี้ยนใน Excel
+    var csvContent = "\uFEFF";
     csvContent += "ชื่อ-นามสกุล,สาขา,แผนก,ตำแหน่ง,สถานะ,เวลาบันทึก,วันที่\n";
     
-    // วนลูปแปลงประวัติเป็นรายบรรทัด
     logs.forEach(function(l) {
       var row = [
         '"' + l.name + '"',
@@ -706,7 +763,6 @@ function checkPw(){
       csvContent += row + "\n";
     });
     
-    // สร้างดาวน์โหลดไฟล์
     var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     var link = document.createElement("a");
     var url = URL.createObjectURL(blob);
