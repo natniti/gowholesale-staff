@@ -434,9 +434,6 @@
 </div>
 
 <script>
-/* ==========================================================================
-   ⚠️ วางลิงก์เว็บแอปตัวใหม่จาก Apps Script ที่ลงท้ายด้วย /exec ตรงนี้ ⚠️
-   ========================================================================== */
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxa1oRkWLEaJDgzYauEEHxygyCcCtpGS_Siu-SRNPwhKVeLoWsOSJyCLJ_SXJlRNDOq6Q/exec";
 
 var BR=['ST01 ศรีนครินทร์','ST02 เชียงใหม่','ST03 อมตะ','ST04 พัทยา','ST05 พระราม 2','ST06 รังสิต','ST07 รามคำแหง','ST08 ภูเก็ต (ราไวย์)','ST09 เมืองภูเก็ต','ST10 เจริญราษฎร์','ST11 อุดรธานี','ST12 ขอนแก่น','ST13 หาดใหญ่','ST14 ระยอง'];
@@ -650,46 +647,48 @@ function togBr(b){
   initSidebar();renderDash();
 }
 
-// 🚀 REAL-TIME DASHBOARD SMART FETCH FROM GOOGLE SHEETS
+// 🚀 REAL-TIME DASHBOARD SMART AUTO-DETECT FROM GOOGLE SHEETS
 function renderDash(){
   var grid=document.getElementById('d-grid');
   grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:#667EEA;font-size:13px">⏳ กำลังดึงข้อมูลล่าสุดจาก Google Sheets...</div>';
 
   fetch(SCRIPT_URL)
     .then(res => res.json())
-    .then(sheetData => {
+    .then(data => {
       var cloudLogs = [];
       var now = new Date();
       var tDay = now.getDate();
       var tMonth = now.getMonth() + 1;
-      var tYear = now.getFullYear();
+      var tYearAD = now.getFullYear(); // 2026
+      var tYearBE = tYearAD + 543;     // 2569
 
-      // ฟังก์ชันช่วยเช็กว่าแถวนี้ใช่วันนี้หรือไม่ (รองรับทุกฟอร์แมต 2026-07-21, 21/7/2569, 21/7/2026)
-      function isToday(dateCell) {
-        if (!dateCell) return false;
-        var s = String(dateCell).trim();
-        if (s.indexOf(tYear + '-' + String(tMonth).padStart(2,'0') + '-' + String(tDay).padStart(2,'0')) >= 0) return true;
-        if (s.indexOf(tDay + '/' + tMonth) >= 0 || s.indexOf(String(tDay).padStart(2,'0') + '/' + String(tMonth).padStart(2,'0')) >= 0) return true;
+      // ฟังก์ชันอัจฉริยะตรวจจับวันที่ทุกประเภท (พ.ศ., ค.ศ., ISO)
+      function isTodayRow(row) {
+        var rowText = JSON.stringify(row);
+        if (rowText.indexOf(tYearAD + '-' + String(tMonth).padStart(2,'0') + '-' + String(tDay).padStart(2,'0')) >= 0) return true;
+        if (rowText.indexOf(tDay + '/' + tMonth + '/' + tYearBE) >= 0 || rowText.indexOf(String(tDay).padStart(2,'0') + '/' + String(tMonth).padStart(2,'0') + '/' + tYearBE) >= 0) return true;
+        if (rowText.indexOf(tDay + '/' + tMonth + '/' + tYearAD) >= 0 || rowText.indexOf(String(tDay).padStart(2,'0') + '/' + String(tMonth).padStart(2,'0') + '/' + tYearAD) >= 0) return true;
         return false;
       }
 
-      if (sheetData && sheetData.length > 1) {
-        for (var i = 1; i < sheetData.length; i++) {
-          var row = sheetData[i];
-          var rawDate = row[8] || row[7] || '';
-          
-          if (isToday(rawDate)) {
-            var timeStr = row[7] ? String(row[7]).split(' ')[1] || String(row[7]) : '';
+      if (data && data.length > 1) {
+        for (var i = 1; i < data.length; i++) {
+          var row = data[i];
+          if (isTodayRow(row)) {
+            var rawStatus = String(row[6] || '').trim();
+            var statusVal = rawStatus.toLowerCase().indexOf('in') >= 0 ? 'Check-in' : 'Check-out';
+            var rawTime = String(row[7] || '');
+            var timeStr = rawTime.indexOf(' ') >= 0 ? rawTime.split(' ')[1] : rawTime;
+            
             cloudLogs.push({
-              uid: row[0],
-              name: row[1],
-              br: row[2],
-              dp: row[3],
-              ps: row[4],
-              et: row[5],
-              status: row[6],
-              time: timeStr,
-              date: todayStr()
+              uid: String(row[0] || '').trim(),
+              name: String(row[1] || '').trim(),
+              br: String(row[2] || '').trim(),
+              dp: String(row[3] || '').trim(),
+              ps: String(row[4] || '').trim(),
+              et: String(row[5] || '').trim(),
+              status: statusVal,
+              time: timeStr
             });
           }
         }
