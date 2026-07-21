@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>See Staff v15 - Go Wholesale Management</title>
+  <title>See Staff v16 - Go Wholesale Management</title>
   <!-- ใช้ฟอนต์ Inter และ Noto Sans Thai เพื่อให้ตัวหนาคมชัด ช่องไฟสวยงามมองง่าย -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -226,7 +226,7 @@
         <i class="ti ti-chevron-right" style="font-size:16px;color:#CBD5E1" aria-hidden="true"></i>
       </button>
     </div>
-    <p style="text-align:center;font-size:11px;color:#CBD5E1;margin-top:20px">Go Wholesale © 2026 • See Staff v15</p>
+    <p style="text-align:center;font-size:11px;color:#CBD5E1;margin-top:20px">Go Wholesale © 2026 • See Staff v16</p>
   </div>
 </div>
 
@@ -442,34 +442,41 @@ var DC={'Fulfillment Manager':'#7C3AED','Section Manager':'#2563EB','Operation':
 var PW='O2O_2026';
 
 var logs=[]; var selSt=null; var camStr=null; var camTmr=null; var actBr=[]; var staffUnlocked=false;
+var lastDashCloudLogs=[]; var staffLoaded=false;
 
-var staff=[
-  {fn:'สมชาย',ln:'ใจดี',br:'ST01 ศรีนครินทร์',dp:'Operation',ps:'Picker',et:'Permanent',uid:'EMP001'},
-  {fn:'วิชัย',ln:'รักดี',br:'ST02 เชียงใหม่',dp:'Delivery',ps:'Delivery Planner',et:'Temporary',uid:'EMP002'},
-  {fn:'สุดา',ln:'มีสุข',br:'ST01 ศรีนครินทร์',dp:'Support',ps:'Admin',et:'FindTemp',uid:'EMP003'},
-  {fn:'ประไพ',ln:'สวยงาม',br:'ST03 อมตะ',dp:'Dry Food',ps:'Supervisor',et:'Permanent',uid:'EMP004'},
-];
+// 🌐 รายชื่อพนักงานตอนนี้โหลดจาก Google Sheet (แท็บ Staff) เสมอ ไม่ใช้ local storage ของเครื่องเป็นหลักอีกต่อไป
+// เพื่อให้ทุกสาขา/ทุกอุปกรณ์เห็นข้อมูลชุดเดียวกัน แทนที่จะเป็นคนละชุดตามแต่ละเครื่อง
+var staff=[];
 
 var TL={Permanent:'ประจำ',Temporary:'สัญญาจ้าง',FindTemp:'พาร์ทไทม์'};
 var TC={Permanent:'b-perm',Temporary:'b-temp',FindTemp:'b-find'};
 
-function loadStorage() {
-  var savedStaff = localStorage.getItem('seestaff_db_v15');
-  if (savedStaff) staff = JSON.parse(savedStaff);
-  else saveStorage();
-  
+function loadLocalLogs() {
   var savedLogs = localStorage.getItem('seestaff_logs_v15');
   if (savedLogs) logs = JSON.parse(savedLogs);
 }
-function saveStorage() { localStorage.setItem('seestaff_db_v15', JSON.stringify(staff)); }
-function saveLogs() { localStorage.setItem('seestaff_logs_v15', JSON.stringify(logs)); }
+
+// ดึงรายชื่อพนักงานล่าสุดจาก Google Sheet (แท็บ Staff)
+function fetchStaffFromCloud(cb){
+  fetch(SCRIPT_URL + '?type=staff')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      staff = data || [];
+      staffLoaded = true;
+      if (cb) cb();
+    })
+    .catch(function(){
+      staffLoaded = true;
+      if (cb) cb();
+    });
+}
 
 function go(id){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.getElementById('p-'+id).classList.add('active');
   if(id==='dash'){initSidebar();renderDash();}
-  if(id==='reg') initReg();
-  if(id==='scan'){resetS();renderLogs();}
+  if(id==='reg'){ initReg(); fetchStaffFromCloud(function(){ if(staffUnlocked) renderStaff(); }); }
+  if(id==='scan'){ resetS(); fetchStaffFromCloud(); refreshLogsFromCloud(); }
   if(id!=='scan') stopCam();
 }
 function openM(id){
@@ -553,6 +560,11 @@ function doSearch(){
   var rs=document.getElementById('s-res'),em=document.getElementById('s-empty'),hn=document.getElementById('s-hint');
   if(!q){rs.innerHTML='';em.style.display='none';hn.style.display='block';return;}
   hn.style.display='none';
+  if(!staffLoaded){
+    em.style.display='none';
+    rs.innerHTML='<div style="text-align:center;padding:14px;color:#94A3B8;font-size:13px">⏳ กำลังโหลดรายชื่อพนักงาน...</div>';
+    return;
+  }
   var found=staff.filter(function(s){return(s.fn+s.ln).toLowerCase().indexOf(q)>=0||(s.fn+' '+s.ln).toLowerCase().indexOf(q)>=0||s.uid.toLowerCase().indexOf(q)>=0});
   if(!found.length){rs.innerHTML='';em.style.display='block';return;}
   em.style.display='none';
@@ -629,10 +641,11 @@ function doCIDirect(s,status){
     body: JSON.stringify(payload)
   }).then(function() {
     if(overlay) overlay.style.display = 'none';
+    // แสดงผลทันทีในเครื่องนี้ก่อน (optimistic) แล้วค่อยซิงก์กับ Google Sheet อีกครั้ง
     logs.unshift({name:s.fn+' '+s.ln,br:s.br,dp:s.dp,ps:s.ps,status:status,time:t,date:todayStr()});
     if(logs.length>500) logs=logs.slice(0,500);
-    saveLogs();
-    renderLogs();
+    renderLogsUI();
+    setTimeout(refreshLogsFromCloud, 900);
     var isIn=status==='Check-in';
     document.getElementById('r-icon').textContent=isIn?'✅':'👋';
     document.getElementById('r-status').textContent=status;
@@ -652,12 +665,35 @@ function resetS(){
   var i=document.getElementById('s-in');if(i)i.value='';
   document.getElementById('s-res').innerHTML='';document.getElementById('s-empty').style.display='none';document.getElementById('s-hint').style.display='block';
 }
-function renderLogs(){
+function renderLogsUI(){
   var el=document.getElementById('s-logs');if(!el)return;
   if(!logs.length){el.innerHTML='<div style="text-align:center;padding:14px;color:#94A3B8;font-size:13px">ยังไม่มีบันทึก</div>';return;}
   el.innerHTML=logs.slice(0,6).map(function(l){
     return '<div class="log-item"><div><div style="font-size:13px;font-weight:600;color:#1E293B">'+l.name+'</div><div style="font-size:11px;color:#94A3B8">'+l.br+' · '+l.dp+'</div></div><div style="text-align:right"><span class="badge '+(l.status==='Check-in'?'b-in':'b-out')+'">'+l.status+'</span><div style="font-size:11px;color:#94A3B8;margin-top:2px">'+l.time+'</div></div></div>';
   }).join('');
+}
+// 🌐 ดึงบันทึก Check-in/out "ของวันนี้ ทุกสาขา" จาก Google Sheet โดยตรง
+// (เดิมอ่านจาก localStorage ของเครื่องตัวเอง ทำให้เห็นบันทึกไม่ครบ/ไม่ตรงกันระหว่างอุปกรณ์หรือสาขา)
+function refreshLogsFromCloud(){
+  var el=document.getElementById('s-logs');
+  if(el && !logs.length) el.innerHTML='<div style="text-align:center;padding:14px;color:#94A3B8;font-size:13px">⏳ กำลังโหลดบันทึกล่าสุด...</div>';
+  fetch(SCRIPT_URL + '?type=attendance')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var arr=(data||[]).slice(-30).reverse(); // เอาแถวล่าสุดขึ้นก่อน
+      logs = arr.map(function(r){
+        var stRaw=String(r.status||'').toLowerCase();
+        var rawTime=String(r.time||'');
+        return {
+          name:r.name, br:r.br, dp:r.dp,
+          status:(stRaw.indexOf('out')>=0?'Check-out':'Check-in'),
+          time:(rawTime.indexOf(' ')>=0?rawTime.split(' ')[1]:rawTime),
+          date:r.workDate
+        };
+      });
+      renderLogsUI();
+    })
+    .catch(function(){ renderLogsUI(); });
 }
 function initSidebar(){
   var now=new Date();
@@ -682,7 +718,7 @@ function renderDash(){
   var grid=document.getElementById('d-grid');
   grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:#667EEA;font-size:13px">⏳ กำลังดึงข้อมูลล่าสุดจาก Google Sheets...</div>';
 
-  fetch(SCRIPT_URL)
+  fetch(SCRIPT_URL + '?type=attendance')
     .then(res => res.json())
     .then(data => {
       var cloudLogs = [];
@@ -720,6 +756,9 @@ function renderDash(){
           }
         }
       }
+
+      // เก็บไว้ใช้ตอน Export ให้ตรงกับข้อมูลบน Dashboard เป๊ะๆ (แก้ปัญหา Export ไม่มีข้อมูล/ไม่กรองตามสาขาที่เลือก)
+      lastDashCloudLogs = cloudLogs;
 
       var branches = actBr.length ? actBr : BR;
       var tIn = 0, tOut = 0, tTotal = 0;
@@ -782,15 +821,20 @@ function renderDash(){
 function checkPw(){
   if(document.getElementById('pw-in').value===PW){
     closeM('m-pw');
-    if(!logs.length) {
-      alert("❌ ยังไม่มีประวัติข้อมูลการลงเวลาในระบบในวันนี้ จึงไม่สามารถ Export ได้ครับ");
+
+    // ✅ Export เฉพาะสาขาที่กำลัง Filter อยู่ในตอนนี้เท่านั้น (ถ้าไม่ได้เลือกสาขาไหนเลย = Export ทุกสาขา)
+    var branches = actBr.length ? actBr : BR;
+    var filtered = lastDashCloudLogs.filter(function(l){ return branches.indexOf(l.br) >= 0; });
+
+    if(!filtered.length) {
+      alert("❌ ไม่มีประวัติ Check-in/Check-out วันนี้ในสาขาที่เลือก จึงไม่สามารถ Export ได้ครับ");
       return;
     }
     
     var csvContent = "\uFEFF";
     csvContent += "ชื่อ-นามสกุล,สาขา,แผนก,ตำแหน่ง,สถานะ,เวลาบันทึก,วันที่\n";
     
-    logs.forEach(function(l) {
+    filtered.forEach(function(l) {
       var row = [
         '"' + l.name + '"',
         '"' + l.br + '"',
@@ -798,7 +842,7 @@ function checkPw(){
         '"' + (l.ps || 'Staff') + '"',
         '"' + l.status + '"',
         '"' + l.time + '"',
-        '"' + (l.date || todayStr()) + '"'
+        '"' + todayStr() + '"'
       ].join(",");
       csvContent += row + "\n";
     });
@@ -806,8 +850,9 @@ function checkPw(){
     var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     var link = document.createElement("a");
     var url = URL.createObjectURL(blob);
+    var brSuffix = actBr.length === 1 ? ('_' + actBr[0].split(' ')[0]) : (actBr.length > 1 ? '_filtered' : '_all');
     link.setAttribute("href", url);
-    link.setAttribute("download", "SeeStaff_Report_" + todayStr() + ".csv");
+    link.setAttribute("download", "SeeStaff_Report_" + todayStr() + brSuffix + ".csv");
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -841,13 +886,27 @@ function doReg(){
   var et=document.getElementById('r-et').value;
   if(!fn||!ln||!br||!dp||!ps||!et){alert('กรุณากรอกข้อมูลที่มี * ให้ครบ');return;}
   var uid='EMP'+String(Date.now()).slice(-6)+String(Math.floor(Math.random()*100)).padStart(2,'0');
-  staff.push({fn:fn,ln:ln,br:br,dp:dp,ps:ps,et:et,uid:uid});
-  saveStorage();
-  ['r-fn','r-ln'].forEach(function(id){document.getElementById(id).value='';});
-  ['r-br','r-dp','r-ps','r-et'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('r-dp-c').style.display='none';document.getElementById('r-ps-c').style.display='none';
-  if(staffUnlocked) renderStaff();
-  alert('ลงทะเบียน '+fn+' '+ln+' สำเร็จ\nUID: '+uid);
+
+  var overlay = document.getElementById('loading-overlay');
+  if(overlay) overlay.style.display = 'flex';
+
+  // ✅ บันทึกพนักงานใหม่ขึ้น Google Sheet (แท็บ Staff) โดยตรง แทนที่จะเก็บแค่ localStorage ของเครื่องนี้
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action:'register', uid:uid, fn:fn, ln:ln, br:br, dp:dp, ps:ps, et:et })
+  }).then(function(){
+    if(overlay) overlay.style.display = 'none';
+    ['r-fn','r-ln'].forEach(function(id){document.getElementById(id).value='';});
+    ['r-br','r-dp','r-ps','r-et'].forEach(function(id){document.getElementById(id).value='';});
+    document.getElementById('r-dp-c').style.display='none';document.getElementById('r-ps-c').style.display='none';
+    fetchStaffFromCloud(function(){ if(staffUnlocked) renderStaff(); });
+    alert('ลงทะเบียน '+fn+' '+ln+' สำเร็จ\nUID: '+uid);
+  }).catch(function(){
+    if(overlay) overlay.style.display = 'none';
+    alert('ลงทะเบียนออนไลน์ล้มเหลว กรุณาเช็กอินเทอร์เน็ตหรือสิทธิ์เว็บแอปครับ');
+  });
 }
 function showQR(uid){
   var s=staff.find(function(x){return x.uid===uid});if(!s)return;
@@ -864,11 +923,23 @@ function showQR(uid){
   openM('m-qr');
 }
 function delStaff(uid){
-  if(confirm('ยืนยันลบพนักงาน?')){
-    staff=staff.filter(function(s){return s.uid!==uid});
-    saveStorage();
-    renderStaff();
-  }
+  if(!confirm('ยืนยันลบพนักงาน?')) return;
+  var overlay = document.getElementById('loading-overlay');
+  if(overlay) overlay.style.display = 'flex';
+
+  // ✅ ลบพนักงานออกจาก Google Sheet (แท็บ Staff) โดยตรง
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action:'deleteStaff', uid:uid })
+  }).then(function(){
+    if(overlay) overlay.style.display = 'none';
+    fetchStaffFromCloud(renderStaff);
+  }).catch(function(){
+    if(overlay) overlay.style.display = 'none';
+    alert('ลบข้อมูลออนไลน์ล้มเหลว กรุณาเช็กอินเทอร์เน็ต');
+  });
 }
 function renderStaff(){
   var el=document.getElementById('r-list');if(!el)return;
@@ -898,8 +969,8 @@ function renderStaff(){
   }).join('');
 }
 
-loadStorage();
-renderLogs();
+loadLocalLogs();
+fetchStaffFromCloud();
 </script>
 </body>
 </html>
