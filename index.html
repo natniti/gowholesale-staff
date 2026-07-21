@@ -581,14 +581,17 @@ function selSF(uid){
   var et=document.getElementById('c-et');et.textContent=TL[s.et];et.className='badge '+TC[s.et];
 }
 function doCI(status) { if (selSt) doCIDirect(selSt, status); }
-function todayStr(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function todayStr(){
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
 
 function doCIDirect(s,status){
   var overlay = document.getElementById('loading-overlay');
   if(overlay) overlay.style.display = 'flex';
 
   var now=new Date();var t=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  var workDateStr = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  var workDateStr = todayStr();
 
   var payload = {
     uid: s.uid, name: s.fn+' '+s.ln, br: s.br, dp: s.dp, ps: s.ps, et: s.et,
@@ -647,6 +650,7 @@ function togBr(b){
   initSidebar();renderDash();
 }
 
+// 🚀 REAL-TIME DASHBOARD SMART FETCH FROM GOOGLE SHEETS
 function renderDash(){
   var grid=document.getElementById('d-grid');
   grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:#667EEA;font-size:13px">⏳ กำลังดึงข้อมูลล่าสุดจาก Google Sheets...</div>';
@@ -656,37 +660,47 @@ function renderDash(){
     .then(sheetData => {
       var cloudLogs = [];
       var now = new Date();
-      var todayFormatted = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+      var tDay = now.getDate();
+      var tMonth = now.getMonth() + 1;
+      var tYear = now.getFullYear();
+
+      // ฟังก์ชันช่วยเช็กว่าแถวนี้ใช่วันนี้หรือไม่ (รองรับทุกฟอร์แมต 2026-07-21, 21/7/2569, 21/7/2026)
+      function isToday(dateCell) {
+        if (!dateCell) return false;
+        var s = String(dateCell).trim();
+        if (s.indexOf(tYear + '-' + String(tMonth).padStart(2,'0') + '-' + String(tDay).padStart(2,'0')) >= 0) return true;
+        if (s.indexOf(tDay + '/' + tMonth) >= 0 || s.indexOf(String(tDay).padStart(2,'0') + '/' + String(tMonth).padStart(2,'0')) >= 0) return true;
+        return false;
+      }
 
       if (sheetData && sheetData.length > 1) {
         for (var i = 1; i < sheetData.length; i++) {
           var row = sheetData[i];
-          var wDate = row[8] ? String(row[8]).trim() : '';
-          var timeStr = row[7] ? String(row[7]).split(' ')[1] || String(row[7]) : '';
+          var rawDate = row[8] || row[7] || '';
           
-          cloudLogs.push({
-            uid: row[0],
-            name: row[1],
-            br: row[2],
-            dp: row[3],
-            ps: row[4],
-            et: row[5],
-            status: row[6],
-            time: timeStr,
-            date: wDate
-          });
+          if (isToday(rawDate)) {
+            var timeStr = row[7] ? String(row[7]).split(' ')[1] || String(row[7]) : '';
+            cloudLogs.push({
+              uid: row[0],
+              name: row[1],
+              br: row[2],
+              dp: row[3],
+              ps: row[4],
+              et: row[5],
+              status: row[6],
+              time: timeStr,
+              date: todayStr()
+            });
+          }
         }
       }
-
-      var allLogs = cloudLogs.concat(logs);
-      var todayLogs = allLogs.filter(function(l){ return l.date === todayFormatted || !l.date; });
 
       var branches = actBr.length ? actBr : BR;
       var tIn = 0, tOut = 0, tTotal = 0;
       grid.innerHTML = '';
 
       branches.forEach(function(b){
-        var bl = todayLogs.filter(function(l){ return l.br === b; });
+        var bl = cloudLogs.filter(function(l){ return l.br === b; });
         var bIn = bl.filter(function(l){ return l.status === 'Check-in'; }).length;
         var bOut = bl.filter(function(l){ return l.status === 'Check-out'; }).length;
         tIn += bIn; tOut += bOut; tTotal += bIn + bOut;
